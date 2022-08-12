@@ -1,6 +1,7 @@
 package htrcak.backend.repository.models;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Issue {
@@ -20,6 +21,9 @@ public class Issue {
     @ManyToOne
     @JoinColumn(name="project_id", referencedColumnName = "id")
     private Project project;
+
+    @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Comment> comments;
 
     public Issue() {
     }
@@ -70,5 +74,13 @@ public class Issue {
 
     public void setIssueType(String issueType) {
         this.issueType = issueType;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }
