@@ -8,3 +8,5 @@ INSERT INTO project(id, title, description) VALUES (3, 'Title 3', 'Description o
 INSERT INTO issue(id, title, comment_number, issue_type, project_id) VALUES (1, 'Issue 1', 0, 'Bug', 1);
 INSERT INTO issue(id, title, comment_number, issue_type, project_id) VALUES (2, 'Issue 2', 0, 'Feature', 1);
 INSERT INTO issue(id, title, comment_number, issue_type, project_id) VALUES (3, 'Issue 1', 0, 'Feature', 2);
+
+INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (1, 'Hrvoje', 'This is some long text that is here, bla bla...', CURRENT_TIMESTAMP, null, 1);
