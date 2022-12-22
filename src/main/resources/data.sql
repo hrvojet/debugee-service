@@ -1,5 +1,6 @@
 DELETE FROM issue;
 DELETE FROM project;
+DELETE FROM comment;
 
 INSERT INTO project(id, title, description) VALUES (1, 'Title 1', 'Description of the first project');
 INSERT INTO project(id, title, description) VALUES (2, 'Title 2', 'Description of the second project');
@@ -10,3 +11,4 @@ INSERT INTO issue(id, title, comment_number, issue_type, project_id) VALUES (2, 
 INSERT INTO issue(id, title, comment_number, issue_type, project_id) VALUES (3, 'Issue 1', 0, 'Feature', 2);
 
 INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (1, 'Hrvoje', 'This is some long text that is here, bla bla...', CURRENT_TIMESTAMP, null, 1);
+UPDATE issue SET comment_number = comment_number + 1 WHERE id = 1;
