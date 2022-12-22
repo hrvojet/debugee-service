@@ -1,6 +1,6 @@
-package htrcak.backend.repository.data;
+package htrcak.backend.projects.data;
 
-import htrcak.backend.repository.models.Project;
+import htrcak.backend.projects.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,4 +1,7 @@
-package htrcak.backend.repository.models;
+package htrcak.backend.issues;
+
+import htrcak.backend.comments.Comment;
+import htrcak.backend.projects.Project;
 
 import javax.persistence.*;
 import java.util.Set;

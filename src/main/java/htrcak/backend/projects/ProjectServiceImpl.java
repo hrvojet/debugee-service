@@ -1,13 +1,11 @@
-package htrcak.backend.services;
+package htrcak.backend.projects;
 
-import htrcak.backend.repository.data.ProjectRepositoryJPA;
-import htrcak.backend.repository.dto.IssueDTO;
-import htrcak.backend.repository.dto.ProjectDTO;
-import htrcak.backend.repository.models.Issue;
-import htrcak.backend.repository.models.Project;
+import htrcak.backend.issues.data.IssueDTO;
+import htrcak.backend.projects.data.ProjectDTO;
+import htrcak.backend.projects.data.ProjectRepositoryJPA;
+import htrcak.backend.issues.Issue;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

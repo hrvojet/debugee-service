@@ -1,6 +1,6 @@
-package htrcak.backend.repository.models;
+package htrcak.backend.projects;
 
-import net.minidev.json.annotate.JsonIgnore;
+import htrcak.backend.issues.Issue;
 
 import javax.persistence.*;
 import java.util.Set;

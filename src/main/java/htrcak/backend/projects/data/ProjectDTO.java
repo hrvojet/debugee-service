@@ -1,8 +1,4 @@
-package htrcak.backend.repository.dto;
-
-import htrcak.backend.repository.models.Issue;
-
-import java.util.Set;
+package htrcak.backend.projects.data;
 
 public class ProjectDTO {
 

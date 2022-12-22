@@ -1,35 +1,22 @@
-package htrcak.backend.repository.models;
+package htrcak.backend.comments.data;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-public class Comment {
+public class CommentDTO {
 
-    @Id
-    private long id;
-
-    @Column
     private String author;
 
-    @Column
     private String text;
 
-    @Column
     private LocalDateTime created;
 
-    @Column
     private LocalDateTime edited;
 
-    @ManyToOne
-    @JoinColumn(name = "issue_id", referencedColumnName = "id")
-    private Issue issue;
-
-    public Comment() {
-    }
-
-    public long getId() {
-        return id;
+    public CommentDTO(String author, String text, LocalDateTime created, LocalDateTime edited) {
+        this.author = author;
+        this.text = text;
+        this.created = created;
+        this.edited = edited;
     }
 
     public String getAuthor() {
@@ -46,9 +33,5 @@ public class Comment {
 
     public LocalDateTime getEdited() {
         return edited;
-    }
-
-    public Issue getIssue() {
-        return issue;
     }
 }

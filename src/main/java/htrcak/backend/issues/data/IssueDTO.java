@@ -1,4 +1,4 @@
-package htrcak.backend.repository.dto;
+package htrcak.backend.issues.data;
 
 public class IssueDTO {
 
