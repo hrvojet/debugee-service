@@ -1,8 +1,11 @@
 package htrcak.backend.controllers;
 
+import htrcak.backend.repository.dto.IssueDTO;
 import htrcak.backend.repository.dto.ProjectDTO;
+import htrcak.backend.services.IssueService;
 import htrcak.backend.services.ProjectService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +22,11 @@ public class ProjectController {
     }
 
     @GetMapping
-    public List<ProjectDTO> findAll() { return projectService.findAll(); }
+    public List<ProjectDTO> findAllProjects() { return projectService.findAll(); }
 
+    @GetMapping("/{id}")
+    public ProjectDTO findProjectById(@PathVariable final Long id) {
+        return projectService.findById(id);
+    }
 
 }

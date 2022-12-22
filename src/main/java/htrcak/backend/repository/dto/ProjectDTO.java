@@ -12,13 +12,10 @@ public class ProjectDTO {
 
     private String description;
 
-    private Set<IssueDTO> issues;
-
-    public ProjectDTO(long id, String title, String description, Set<IssueDTO> issues) {
+    public ProjectDTO(long id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.issues = issues;
     }
 
     public long getId() {
@@ -33,7 +30,4 @@ public class ProjectDTO {
         return description;
     }
 
-    public Set<IssueDTO> getIssues() {
-        return issues;
-    }
 }

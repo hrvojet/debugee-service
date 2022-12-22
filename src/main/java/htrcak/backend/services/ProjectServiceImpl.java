@@ -34,7 +34,7 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     private ProjectDTO mapProjectToDTO(Project project) {
-        return new ProjectDTO(project.getId(), project.getTitle(), project.getDescription(), mapIssuesToDTO(project.getIssues()));
+        return new ProjectDTO(project.getId(), project.getTitle(), project.getDescription());
     }
 
     private Set<IssueDTO> mapIssuesToDTO(Set<Issue> issues) {
