@@ -12,7 +12,7 @@ public class Comment {
     private long id;
 
     @Column
-    private String author;
+    private int author;
 
     @Column
     private String text;
@@ -34,7 +34,7 @@ public class Comment {
         return id;
     }
 
-    public String getAuthor() {
+    public int getAuthor() {
         return author;
     }
 
