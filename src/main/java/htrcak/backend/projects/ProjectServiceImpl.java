@@ -35,13 +35,4 @@ public class ProjectServiceImpl implements ProjectService{
         return new ProjectDTO(project.getId(), project.getTitle(), project.getDescription());
     }
 
-    private Set<IssueDTO> mapIssuesToDTO(Set<Issue> issues) {
-        Set<IssueDTO> issueDTOS = new HashSet<>();
-
-        for(Issue i : issues) {
-            issueDTOS.add(new IssueDTO(i.getId(), i.getTitle(), i.getCommentNumber(), i.getIssueType()));
-        }
-
-        return issueDTOS;
-    }
 }
