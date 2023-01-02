@@ -9,6 +9,6 @@ public interface ProjectRepositoryJPA extends JpaRepository<Project, Long> {
 
     List<Project> findAll();
 
-    List<Project> findProjectById(long id);
+    List<Project> findById(long id);
 
 }

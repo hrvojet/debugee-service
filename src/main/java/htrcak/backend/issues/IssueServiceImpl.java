@@ -23,17 +23,12 @@ public class IssueServiceImpl implements IssueService{
         return issueRepositoryJPA.findAll().stream().map(this::mapIssueToDTO).collect(Collectors.toList());
     }
 
-    private IssueDTO mapIssueToDTO(Issue issue) {
-        return new IssueDTO(issue.getId(), issue.getProject().getId(), issue.getTitle(), issue.getCommentNumber(), issue.getIssueType());
+    @Override
+    public IssueDTO findById(long id) {
+        return issueRepositoryJPA.findById(id).stream().map(this::mapIssueToDTO).findAny().orElse(null);
     }
 
-    private Set<IssueDTO> mapIssuesToDTO(Set<Issue> issues) {
-        Set<IssueDTO> issueDTOS = new HashSet<>();
-
-        for(Issue i : issues) {
-            issueDTOS.add(new IssueDTO(i.getId(), i.getProject().getId(), i.getTitle(), i.getCommentNumber(), i.getIssueType()));
-        }
-
-        return issueDTOS;
+    private IssueDTO mapIssueToDTO(Issue issue) {
+        return new IssueDTO(issue.getId(), issue.getProject().getId(), issue.getTitle(), issue.getCommentNumber(), issue.getIssueType());
     }
 }

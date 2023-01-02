@@ -2,6 +2,7 @@ package htrcak.backend.issues;
 
 import htrcak.backend.issues.data.IssueDTO;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,4 +18,9 @@ public class IssueController {
 
     @GetMapping
     public List<IssueDTO> findAllIssues() { return issueService.findAll(); }
+
+    @GetMapping("/{id}")
+    public IssueDTO findIssueById(@PathVariable final Long id) {
+        return issueService.findById(id);
+    }
 }
