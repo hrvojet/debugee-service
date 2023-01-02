@@ -24,14 +24,14 @@ public class IssueServiceImpl implements IssueService{
     }
 
     private IssueDTO mapIssueToDTO(Issue issue) {
-        return new IssueDTO(issue.getId(), issue.getTitle(), issue.getCommentNumber(), issue.getIssueType());
+        return new IssueDTO(issue.getId(), issue.getProject().getId(), issue.getTitle(), issue.getCommentNumber(), issue.getIssueType());
     }
 
     private Set<IssueDTO> mapIssuesToDTO(Set<Issue> issues) {
         Set<IssueDTO> issueDTOS = new HashSet<>();
 
         for(Issue i : issues) {
-            issueDTOS.add(new IssueDTO(i.getId(), i.getTitle(), i.getCommentNumber(), i.getIssueType()));
+            issueDTOS.add(new IssueDTO(i.getId(), i.getProject().getId(), i.getTitle(), i.getCommentNumber(), i.getIssueType()));
         }
 
         return issueDTOS;
