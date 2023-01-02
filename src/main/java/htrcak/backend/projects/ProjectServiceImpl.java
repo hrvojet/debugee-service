@@ -32,7 +32,7 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     private ProjectDTO mapProjectToDTO(Project project) {
-        return new ProjectDTO(project.getId(), project.getTitle(), project.getDescription());
+        return new ProjectDTO(project.getId(), project.getTitle(), project.getDescription(), project.getOpenedIssues(), project.getClosedIssues());
     }
 
 }

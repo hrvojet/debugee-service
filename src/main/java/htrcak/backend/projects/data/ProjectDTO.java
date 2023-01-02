@@ -8,10 +8,16 @@ public class ProjectDTO {
 
     private String description;
 
-    public ProjectDTO(long id, String title, String description) {
+    private int openedIssues;
+
+    private int closedIssues;
+
+    public ProjectDTO(long id, String title, String description, int openedIssues, int closedIssues) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.closedIssues = closedIssues;
+        this.openedIssues = openedIssues;
     }
 
     public long getId() {
@@ -26,4 +32,9 @@ public class ProjectDTO {
         return description;
     }
 
+    public int getOpenedIssues() { return openedIssues; }
+
+    public int getClosedIssues() {
+        return closedIssues;
+    }
 }

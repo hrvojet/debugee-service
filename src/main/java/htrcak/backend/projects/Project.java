@@ -23,10 +23,18 @@ public class Project {
     //@JsonIgnore
     private Set<Issue> issues;
 
-    public Project(String title, String description, Set<Issue> issues) {
+    @Column
+    private int closedIssues;
+
+    @Column
+    private int openedIssues;
+
+    public Project(String title, String description, Set<Issue> issues, int closedIssues, int openedIssues) {
         this.title = title;
         this.description = description;
         this.issues = issues;
+        this.closedIssues = closedIssues;
+        this.openedIssues = openedIssues;
     }
 
     public Project() {}
@@ -61,5 +69,21 @@ public class Project {
 
     public void setIssues(Set<Issue> issues) {
         this.issues = issues;
+    }
+
+    public int getClosedIssues() {
+        return closedIssues;
+    }
+
+    public void setClosedIssues(int closedIssues) {
+        this.closedIssues = closedIssues;
+    }
+
+    public int getOpenedIssues() {
+        return openedIssues;
+    }
+
+    public void setOpenedIssues(int openedIssues) {
+        this.openedIssues = openedIssues;
     }
 }
