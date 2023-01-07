@@ -29,10 +29,9 @@ public class Project {
     @Column
     private int openedIssues;
 
-    public Project(String title, String description, Set<Issue> issues, int closedIssues, int openedIssues) {
+    public Project(String title, String description, int closedIssues, int openedIssues) {
         this.title = title;
         this.description = description;
-        this.issues = issues;
         this.closedIssues = closedIssues;
         this.openedIssues = openedIssues;
     }
