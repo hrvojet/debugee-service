@@ -1,12 +1,14 @@
 package htrcak.backend.projects;
 
 import htrcak.backend.projects.data.ProjectDTO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import htrcak.backend.projects.data.ProjectPost;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("projects")
@@ -24,6 +26,20 @@ public class ProjectController {
     @GetMapping("/{id}")
     public ProjectDTO findProjectById(@PathVariable final Long id) {
         return projectService.findById(id);
+    }
+
+    @PostMapping
+    public ResponseEntity<ProjectDTO> saveProject(@Valid @RequestBody final ProjectPost projectPost) {
+        return projectService.saveNewProject(projectPost)
+                .map(
+                        ProjectDTO -> ResponseEntity
+                                .status(HttpStatus.CREATED)
+                                .body(ProjectDTO)
+                ).orElseGet(
+                        () -> ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .build()
+                );
     }
 
 }

@@ -19,6 +19,10 @@ spring:
     console:
       enabled: true
 
+server:
+  error:
+    include-binding-errors: always
+
 logging:
   level:
     org:
