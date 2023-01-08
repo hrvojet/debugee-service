@@ -13,4 +13,6 @@ public interface ProjectService {
     ProjectDTO findById(long id);
 
     Optional<ProjectDTO> saveNewProject(ProjectPostValidator projectPost);
+
+    void deleteById(long id);
 }

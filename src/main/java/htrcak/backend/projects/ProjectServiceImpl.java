@@ -3,6 +3,7 @@ package htrcak.backend.projects;
 import htrcak.backend.projects.data.ProjectDTO;
 import htrcak.backend.projects.data.ProjectPostValidator;
 import htrcak.backend.projects.data.ProjectRepositoryJPA;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +35,11 @@ public class ProjectServiceImpl implements ProjectService{
         Project saved = this.projectRepositoryJPA.save(new Project(projectPost.getTitle(), projectPost.getDescription(), 0, 0));
 
         return Optional.of(new ProjectDTO(saved.getId(), saved.getDescription(), saved.getTitle(), saved.getOpenedIssues(), saved.getClosedIssues()));
+    }
+
+    @Override
+    public void deleteById(long id) {
+        this.projectRepositoryJPA.deleteById(id);
     }
 
     private ProjectDTO mapProjectToDTO(Project project) {
