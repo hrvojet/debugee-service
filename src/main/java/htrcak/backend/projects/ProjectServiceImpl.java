@@ -1,6 +1,7 @@
 package htrcak.backend.projects;
 
 import htrcak.backend.projects.data.ProjectDTO;
+import htrcak.backend.projects.data.ProjectPatchValidator;
 import htrcak.backend.projects.data.ProjectPostValidator;
 import htrcak.backend.projects.data.ProjectRepositoryJPA;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -40,6 +41,27 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public void deleteById(long id) {
         this.projectRepositoryJPA.deleteById(id);
+    }
+
+    @Override
+    public Optional<ProjectDTO> updateById(ProjectPatchValidator projectPost, long id) {
+        Project p = this.projectRepositoryJPA.getById(id);
+        boolean projectIsUpdated = false;
+
+        if(projectPost.getDescription() != null && !projectPost.getDescription().isBlank() && !projectPost.getDescription().equals(p.getDescription())) {
+            p.setDescription(projectPost.getDescription());
+            projectIsUpdated = true;
+        }
+        if(projectPost.getTitle() != null && !projectPost.getTitle().isBlank() && !projectPost.getTitle().equals(p.getTitle())) {
+            p.setTitle(projectPost.getTitle());
+            projectIsUpdated = true;
+        }
+
+        if(projectIsUpdated) {
+            return Optional.of(mapProjectToDTO(this.projectRepositoryJPA.save(p)));
+        } else {
+            return Optional.empty();
+        }
     }
 
     private ProjectDTO mapProjectToDTO(Project project) {

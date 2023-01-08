@@ -1,6 +1,7 @@
 package htrcak.backend.projects;
 
 import htrcak.backend.projects.data.ProjectDTO;
+import htrcak.backend.projects.data.ProjectPatchValidator;
 import htrcak.backend.projects.data.ProjectPostValidator;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -57,6 +58,21 @@ public class ProjectController {
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProjectDTO> updateProject(@Valid @RequestBody final ProjectPatchValidator projectPost, @PathVariable final long id) {
+        // TODO javax.persistence.EntityNotFoundException
+        // https://www.baeldung.com/exception-handling-for-rest-with-spring
+        return projectService.updateById(projectPost, id)
+                .map(ProjectDTO -> ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(ProjectDTO))
+                .orElseGet(
+                        () -> ResponseEntity
+                                .status(HttpStatus.NO_CONTENT)
+                                .build()
+                );
     }
 
 }

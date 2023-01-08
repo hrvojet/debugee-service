@@ -1,6 +1,7 @@
 package htrcak.backend.projects;
 
 import htrcak.backend.projects.data.ProjectDTO;
+import htrcak.backend.projects.data.ProjectPatchValidator;
 import htrcak.backend.projects.data.ProjectPostValidator;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface ProjectService {
     Optional<ProjectDTO> saveNewProject(ProjectPostValidator projectPost);
 
     void deleteById(long id);
+
+    Optional<ProjectDTO> updateById(ProjectPatchValidator projectPost, long id);
 }
