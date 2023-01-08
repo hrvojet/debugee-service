@@ -35,7 +35,7 @@ public class ProjectServiceImpl implements ProjectService{
     public Optional<ProjectDTO> saveNewProject(ProjectPostValidator projectPost) {
         Project saved = this.projectRepositoryJPA.save(new Project(projectPost.getTitle(), projectPost.getDescription(), 0, 0));
 
-        return Optional.of(new ProjectDTO(saved.getId(), saved.getDescription(), saved.getTitle(), saved.getOpenedIssues(), saved.getClosedIssues()));
+        return Optional.of(mapProjectToDTO(saved));
     }
 
     @Override
