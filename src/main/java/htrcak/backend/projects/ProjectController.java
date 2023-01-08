@@ -1,14 +1,13 @@
 package htrcak.backend.projects;
 
 import htrcak.backend.projects.data.ProjectDTO;
-import htrcak.backend.projects.data.ProjectPost;
+import htrcak.backend.projects.data.ProjectPostValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("projects")
@@ -29,7 +28,7 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectDTO> saveProject(@Valid @RequestBody final ProjectPost projectPost) {
+    public ResponseEntity<ProjectDTO> saveProject(@Valid @RequestBody final ProjectPostValidator projectPost) {
         return projectService.saveNewProject(projectPost)
                 .map(
                         ProjectDTO -> ResponseEntity

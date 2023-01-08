@@ -2,7 +2,7 @@ package htrcak.backend.projects.data;
 
 import javax.validation.constraints.NotBlank;
 
-public class ProjectPost {
+public class ProjectPostValidator {
 
     @NotBlank(message = "Title must not be empty")
     private String title;
