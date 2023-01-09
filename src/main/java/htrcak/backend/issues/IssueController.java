@@ -2,11 +2,14 @@ package htrcak.backend.issues;
 
 import htrcak.backend.issues.data.IssueDTO;
 import htrcak.backend.issues.data.IssuePostValidator;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("issues")
@@ -36,5 +39,19 @@ public class IssueController {
                                 .status(HttpStatus.NO_CONTENT)
                                 .build()
                 );
+    }
+
+    @DeleteMapping("/{issueId}")
+    public ResponseEntity<Map<String,String>> delete(@PathVariable long issueId) {
+        try{
+            issueService.deleteById(issueId);
+        } catch (EmptyResultDataAccessException e) {
+            Map<String,String> json = new HashMap<>();
+            json.put("projectID",Long.toString(issueId));
+            json.put("error","No issue with such ID");
+            return new ResponseEntity<>(json, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

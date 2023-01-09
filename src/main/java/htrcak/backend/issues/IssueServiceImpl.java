@@ -40,6 +40,11 @@ public class IssueServiceImpl implements IssueService{
         return Optional.of(mapIssueToDTO(issueRepositoryJPA.save(new Issue(projectRepositoryJPA.getById(id), issuePostValidator.getTitle(), issuePostValidator.getIssueType()))));
     }
 
+    @Override
+    public void deleteById(long issueId) {
+        this.issueRepositoryJPA.deleteById(issueId);
+    }
+
     private IssueDTO mapIssueToDTO(Issue issue) {
         return new IssueDTO(issue.getId(), issue.getProject().getId(), issue.getTitle(), issue.getCommentNumber(), issue.getIssueType());
     }
