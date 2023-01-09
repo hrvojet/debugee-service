@@ -1,11 +1,15 @@
 package htrcak.backend.issues;
 
+import htrcak.backend.issues.data.IssuePostValidator;
 import htrcak.backend.issues.data.IssueRepositoryJPA;
 import htrcak.backend.issues.data.IssueDTO;
+import htrcak.backend.projects.data.ProjectRepositoryJPA;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,6 +17,9 @@ import java.util.stream.Collectors;
 public class IssueServiceImpl implements IssueService{
 
     private final IssueRepositoryJPA issueRepositoryJPA;
+
+    @Autowired
+    private ProjectRepositoryJPA projectRepositoryJPA;
 
     public IssueServiceImpl(IssueRepositoryJPA issueRepositoryJPA) {
         this.issueRepositoryJPA = issueRepositoryJPA;
@@ -26,6 +33,11 @@ public class IssueServiceImpl implements IssueService{
     @Override
     public IssueDTO findById(long id) {
         return issueRepositoryJPA.findById(id).stream().map(this::mapIssueToDTO).findAny().orElse(null);
+    }
+
+    @Override
+    public Optional<IssueDTO> saveNewIssue(long id, IssuePostValidator issuePostValidator) {
+        return Optional.of(mapIssueToDTO(issueRepositoryJPA.save(new Issue(projectRepositoryJPA.getById(id), issuePostValidator.getTitle(), issuePostValidator.getIssueType()))));
     }
 
     private IssueDTO mapIssueToDTO(Issue issue) {

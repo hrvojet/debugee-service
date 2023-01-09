@@ -4,12 +4,14 @@ import htrcak.backend.comments.Comment;
 import htrcak.backend.projects.Project;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 public class Issue {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
@@ -29,6 +31,12 @@ public class Issue {
     private Set<Comment> comments;
 
     public Issue() {
+    }
+
+    public Issue(Project project, String title, String issueType) {
+        this.project = project;
+        this.title = title;
+        this.issueType = Objects.requireNonNullElse(issueType, "");
     }
 
     public long getId() {

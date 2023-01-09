@@ -1,10 +1,10 @@
 package htrcak.backend.issues;
 
 import htrcak.backend.issues.data.IssueDTO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import htrcak.backend.issues.data.IssuePostValidator;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +22,19 @@ public class IssueController {
     @GetMapping("/{id}")
     public IssueDTO findIssueById(@PathVariable final Long id) {
         return issueService.findById(id);
+    }
+
+    @PostMapping("/{projectId}")
+    public ResponseEntity<IssueDTO> saveIssueById(@PathVariable final long projectId, @RequestBody final IssuePostValidator issuePostValidator) {
+
+        return issueService.saveNewIssue(projectId, issuePostValidator)
+                .map(IssueDTO -> ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(IssueDTO))
+                .orElseGet(
+                        () -> ResponseEntity
+                                .status(HttpStatus.NO_CONTENT)
+                                .build()
+                );
     }
 }
