@@ -1,12 +1,15 @@
 package htrcak.backend.issues;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import htrcak.backend.issues.data.IssueDTO;
+import htrcak.backend.issues.data.IssuePatchValidator;
 import htrcak.backend.issues.data.IssuePostValidator;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,5 +56,19 @@ public class IssueController {
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/{issueId}")
+    public ResponseEntity<IssueDTO> updateIssue(@PathVariable final long issueId, @Valid @RequestBody final IssuePatchValidator issuePatchValidator) {
+
+        return issueService.updateById(issuePatchValidator, issueId)
+                .map(IssueDTO -> ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(IssueDTO))
+                .orElseGet(
+                        () -> ResponseEntity
+                                .status(HttpStatus.NO_CONTENT)
+                                .build()
+                );
     }
 }

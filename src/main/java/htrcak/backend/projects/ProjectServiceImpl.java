@@ -44,16 +44,16 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public Optional<ProjectDTO> updateById(ProjectPatchValidator projectPost, long id) {
+    public Optional<ProjectDTO> updateById(ProjectPatchValidator projectPatchValidator, long id) {
         Project p = this.projectRepositoryJPA.getById(id);
         boolean projectIsUpdated = false;
 
-        if(projectPost.getDescription() != null && !projectPost.getDescription().isBlank() && !projectPost.getDescription().equals(p.getDescription())) {
-            p.setDescription(projectPost.getDescription());
+        if(projectPatchValidator.getDescription() != null && !projectPatchValidator.getDescription().isBlank() && !projectPatchValidator.getDescription().equals(p.getDescription())) {
+            p.setDescription(projectPatchValidator.getDescription());
             projectIsUpdated = true;
         }
-        if(projectPost.getTitle() != null && !projectPost.getTitle().isBlank() && !projectPost.getTitle().equals(p.getTitle())) {
-            p.setTitle(projectPost.getTitle());
+        if(projectPatchValidator.getTitle() != null && !projectPatchValidator.getTitle().isBlank() && !projectPatchValidator.getTitle().equals(p.getTitle())) {
+            p.setTitle(projectPatchValidator.getTitle());
             projectIsUpdated = true;
         }
 

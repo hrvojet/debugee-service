@@ -1,5 +1,6 @@
 package htrcak.backend.issues;
 
+import htrcak.backend.issues.data.IssuePatchValidator;
 import htrcak.backend.issues.data.IssuePostValidator;
 import htrcak.backend.issues.data.IssueRepositoryJPA;
 import htrcak.backend.issues.data.IssueDTO;
@@ -43,6 +44,28 @@ public class IssueServiceImpl implements IssueService{
     @Override
     public void deleteById(long issueId) {
         this.issueRepositoryJPA.deleteById(issueId);
+    }
+
+    @Override
+    public Optional<IssueDTO> updateById(IssuePatchValidator issuePatchValidator, long issueId) {
+        Issue i = this.issueRepositoryJPA.getById(issueId);
+        boolean projectIsUpdated = false;
+
+        if(issuePatchValidator.getTitle() != null && !issuePatchValidator.getTitle().isBlank() && !issuePatchValidator.getTitle().equals(i.getTitle())) {
+            i.setTitle(issuePatchValidator.getTitle());
+            projectIsUpdated = true;
+        }
+
+        if(issuePatchValidator.getIssueType() != null && !issuePatchValidator.getIssueType().isBlank() && !issuePatchValidator.getIssueType().equals(i.getIssueType())) {
+            i.setIssueType(issuePatchValidator.getIssueType());
+            projectIsUpdated = true;
+        }
+
+        if (projectIsUpdated) {
+            return Optional.of(mapIssueToDTO(this.issueRepositoryJPA.save(i)));
+        } else {
+            return Optional.empty();
+        }
     }
 
     private IssueDTO mapIssueToDTO(Issue issue) {
