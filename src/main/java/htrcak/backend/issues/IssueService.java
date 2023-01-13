@@ -17,7 +17,7 @@ public interface IssueService {
 
     IssueDTO findById(long id);
 
-    Optional<IssueDTO> saveNewIssue(long id, IssuePostValidator issuePostValidator);
+    Optional<IssueDTO> saveNewIssue(IssuePostValidator issuePostValidator);
 
     void deleteById(long issueId);
 

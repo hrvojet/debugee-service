@@ -42,8 +42,8 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
-    public Optional<IssueDTO> saveNewIssue(long id, IssuePostValidator issuePostValidator) {
-        return Optional.of(mapIssueToDTO(issueRepositoryJPA.save(new Issue(projectRepositoryJPA.getById(id), issuePostValidator.getTitle(), issuePostValidator.getIssueType()))));
+    public Optional<IssueDTO> saveNewIssue(IssuePostValidator issuePostValidator) {
+        return Optional.of(mapIssueToDTO(issueRepositoryJPA.save(new Issue(projectRepositoryJPA.getById(issuePostValidator.getProjectId()), issuePostValidator.getTitle(), issuePostValidator.getIssueType()))));
     }
 
     @Override

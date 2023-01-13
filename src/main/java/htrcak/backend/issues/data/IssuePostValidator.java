@@ -11,6 +11,9 @@ public class IssuePostValidator {
     @NotBlank(message = "Description must not be empty")
     private String firstComment;
 
+    @NotNull(message = "Project Id must nut be emppty")
+    private Long projectId;
+
     private String issueType;
 
     public String getTitle() {
@@ -19,6 +22,10 @@ public class IssuePostValidator {
 
     public String getFirstComment() {
         return firstComment;
+    }
+
+    public Long getProjectId() {
+        return projectId;
     }
 
     public String getIssueType() {

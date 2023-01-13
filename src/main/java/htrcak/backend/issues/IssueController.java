@@ -2,7 +2,6 @@ package htrcak.backend.issues;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import htrcak.backend.issues.data.IssueDTO;
-import htrcak.backend.issues.data.IssueListDTO;
 import htrcak.backend.issues.data.IssuePatchValidator;
 import htrcak.backend.issues.data.IssuePostValidator;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,10 +36,10 @@ public class IssueController {
         return issueService.findById(id);
     }
 
-    @PostMapping("/{projectId}")
-    public ResponseEntity<IssueDTO> saveIssueById(@PathVariable final long projectId, @RequestBody final IssuePostValidator issuePostValidator) {
+    @PostMapping
+    public ResponseEntity<IssueDTO> saveIssueById(@Valid @RequestBody final IssuePostValidator issuePostValidator) {
 
-        return issueService.saveNewIssue(projectId, issuePostValidator)
+        return issueService.saveNewIssue(issuePostValidator)
                 .map(IssueDTO -> ResponseEntity
                         .status(HttpStatus.OK)
                         .body(IssueDTO))
