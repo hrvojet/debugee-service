@@ -2,6 +2,7 @@ package htrcak.backend.issues;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import htrcak.backend.issues.data.IssueDTO;
+import htrcak.backend.issues.data.IssueListDTO;
 import htrcak.backend.issues.data.IssuePatchValidator;
 import htrcak.backend.issues.data.IssuePostValidator;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -23,7 +24,13 @@ public class IssueController {
     public IssueController(IssueService issueService) { this.issueService = issueService; }
 
     @GetMapping
-    public List<IssueDTO> findAllIssues() { return issueService.findAll(); }
+    public List<IssueDTO> findAllIssues(@RequestParam(required = false) final Long projectId) {
+        if(projectId != null) {
+            return issueService.findAllByProjectId(projectId);
+        } else {
+            return issueService.findAll();
+        }
+    }
 
     @GetMapping("/{id}")
     public IssueDTO findIssueById(@PathVariable final Long id) {

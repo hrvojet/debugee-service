@@ -13,6 +13,8 @@ public interface IssueService {
 
     List<IssueDTO> findAll();
 
+    List<IssueDTO> findAllByProjectId(Long projectId);
+
     IssueDTO findById(long id);
 
     Optional<IssueDTO> saveNewIssue(long id, IssuePostValidator issuePostValidator);

@@ -32,6 +32,11 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
+    public List<IssueDTO> findAllByProjectId(Long projectId) {
+        return issueRepositoryJPA.findAllByProjectId(projectId).stream().map(this::mapIssueToDTO).collect(Collectors.toList());
+    }
+
+    @Override
     public IssueDTO findById(long id) {
         return issueRepositoryJPA.findById(id).stream().map(this::mapIssueToDTO).findAny().orElse(null);
     }
