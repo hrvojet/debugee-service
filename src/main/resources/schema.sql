@@ -1,3 +1,9 @@
+CREATE TABLE IF NOT EXISTS gitlab_user(
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    username VARCHAR(256) NOT NULL,
+    email VARCHAR(256)NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS project (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     /*owner INT NOT NULL,*/
@@ -24,6 +30,6 @@ CREATE TABLE IF NOT EXISTS comment (
     text VARCHAR(4096) NOT NULL,
     created TIMESTAMP NOT NULL,
     edited TIMESTAMP,
-    FOREIGN KEY (issue_id) REFERENCES issue(id)
-    /*FOREIGN KEY (author) REFERENCES user*/
+    FOREIGN KEY (issue_id) REFERENCES issue(id),
+    FOREIGN KEY (author) REFERENCES gitlab_user(id)
 );

@@ -1,6 +1,7 @@
 package htrcak.backend.comments;
 
 import htrcak.backend.issues.Issue;
+import htrcak.backend.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,9 +11,6 @@ public class Comment {
 
     @Id
     private long id;
-
-    @Column
-    private int author;
 
     @Column
     private String text;
@@ -27,6 +25,10 @@ public class Comment {
     @JoinColumn(name = "issue_id", referencedColumnName = "id")
     private Issue issue;
 
+    @ManyToOne
+    @JoinColumn(name = "author", referencedColumnName = "id")
+    private User author;
+
     public Comment() {
     }
 
@@ -34,9 +36,6 @@ public class Comment {
         return id;
     }
 
-    public int getAuthor() {
-        return author;
-    }
 
     public String getText() {
         return text;
@@ -52,5 +51,9 @@ public class Comment {
 
     public Issue getIssue() {
         return issue;
+    }
+
+    public User getUser() {
+        return author;
     }
 }
