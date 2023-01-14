@@ -1,10 +1,12 @@
 package htrcak.backend.comments.data;
 
+import htrcak.backend.user.model.User;
+import htrcak.backend.user.model.UserDTO;
+
 import java.time.LocalDateTime;
 
 public class CommentDTO {
 
-    private String author;
 
     private String text;
 
@@ -12,15 +14,13 @@ public class CommentDTO {
 
     private LocalDateTime edited;
 
-    public CommentDTO(String author, String text, LocalDateTime created, LocalDateTime edited) {
+    private UserDTO author;
+
+    public CommentDTO(UserDTO author, String text, LocalDateTime created, LocalDateTime edited) {
         this.author = author;
         this.text = text;
         this.created = created;
         this.edited = edited;
-    }
-
-    public String getAuthor() {
-        return author;
     }
 
     public String getText() {
@@ -33,5 +33,9 @@ public class CommentDTO {
 
     public LocalDateTime getEdited() {
         return edited;
+    }
+
+    public UserDTO getAuthor() {
+        return author;
     }
 }
