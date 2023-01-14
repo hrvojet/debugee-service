@@ -1,6 +1,5 @@
 package htrcak.backend.issues;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import htrcak.backend.issues.data.IssueDTO;
 import htrcak.backend.issues.data.IssuePatchValidator;
 import htrcak.backend.issues.data.IssuePostValidator;

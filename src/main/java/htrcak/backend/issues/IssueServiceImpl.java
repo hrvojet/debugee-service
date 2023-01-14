@@ -1,17 +1,15 @@
 package htrcak.backend.issues;
 
+import htrcak.backend.issues.data.IssueDTO;
 import htrcak.backend.issues.data.IssuePatchValidator;
 import htrcak.backend.issues.data.IssuePostValidator;
 import htrcak.backend.issues.data.IssueRepositoryJPA;
-import htrcak.backend.issues.data.IssueDTO;
 import htrcak.backend.projects.data.ProjectRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

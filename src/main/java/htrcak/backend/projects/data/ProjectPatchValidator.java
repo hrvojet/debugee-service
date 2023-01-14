@@ -1,7 +1,5 @@
 package htrcak.backend.projects.data;
 
-import javax.validation.constraints.NotBlank;
-
 public class ProjectPatchValidator {
 
     private String title;

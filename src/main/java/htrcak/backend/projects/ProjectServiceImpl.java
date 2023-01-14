@@ -4,7 +4,6 @@ import htrcak.backend.projects.data.ProjectDTO;
 import htrcak.backend.projects.data.ProjectPatchValidator;
 import htrcak.backend.projects.data.ProjectPostValidator;
 import htrcak.backend.projects.data.ProjectRepositoryJPA;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

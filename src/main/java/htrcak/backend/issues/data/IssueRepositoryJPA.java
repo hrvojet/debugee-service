@@ -1,7 +1,6 @@
 package htrcak.backend.issues.data;
 
 import htrcak.backend.issues.Issue;
-import htrcak.backend.projects.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

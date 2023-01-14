@@ -1,9 +1,5 @@
 package htrcak.backend.issues.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.validation.constraints.NotBlank;
-
 public class IssuePatchValidator {
 
     private String title;

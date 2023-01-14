@@ -3,7 +3,6 @@ package htrcak.backend.user.model;
 import htrcak.backend.comments.Comment;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
