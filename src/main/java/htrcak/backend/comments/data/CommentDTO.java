@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 public class CommentDTO {
 
+    private long id;
 
     private String text;
 
@@ -16,11 +17,16 @@ public class CommentDTO {
 
     private UserDTO author;
 
-    public CommentDTO(UserDTO author, String text, LocalDateTime created, LocalDateTime edited) {
+    public CommentDTO(long id, UserDTO author, String text, LocalDateTime created, LocalDateTime edited) {
+        this.id = id;
         this.author = author;
         this.text = text;
         this.created = created;
         this.edited = edited;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getText() {
