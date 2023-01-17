@@ -1,9 +1,6 @@
 package htrcak.backend.issues;
 
-import htrcak.backend.issues.data.IssueDTO;
-import htrcak.backend.issues.data.IssuePatchValidator;
-import htrcak.backend.issues.data.IssuePostValidator;
-import htrcak.backend.issues.data.IssueRepositoryJPA;
+import htrcak.backend.issues.data.*;
 import htrcak.backend.projects.data.ProjectRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static htrcak.backend.utils.jpa.IssueSpecification.*;
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class IssueServiceImpl implements IssueService{
@@ -24,14 +24,18 @@ public class IssueServiceImpl implements IssueService{
         this.issueRepositoryJPA = issueRepositoryJPA;
     }
 
+
     @Override
-    public List<IssueDTO> findAll() {
-        return issueRepositoryJPA.findAll().stream().map(this::mapIssueToDTO).collect(Collectors.toList());
+    public List<IssueDTO> searchIssues(Long id, IssueSearchCommand isc) {
+        return convertToDTOList(issueRepositoryJPA.findAll(
+                where(getById(id)
+                        .and(findComment(isc)))
+        ));
     }
 
     @Override
-    public List<IssueDTO> findAllByProjectId(Long projectId) {
-        return issueRepositoryJPA.findAllByProjectId(projectId).stream().map(this::mapIssueToDTO).collect(Collectors.toList());
+    public List<IssueDTO> findAll() {
+        return convertToDTOList(issueRepositoryJPA.findAll());
     }
 
     @Override
@@ -73,5 +77,9 @@ public class IssueServiceImpl implements IssueService{
 
     private IssueDTO mapIssueToDTO(Issue issue) {
         return new IssueDTO(issue.getId(), issue.getProject().getId(), issue.getTitle(), issue.getCommentNumber(), issue.getIssueType());
+    }
+
+    private List<IssueDTO> convertToDTOList(List<Issue> issueList) {
+        return issueList.stream().map(this::mapIssueToDTO).collect(Collectors.toList());
     }
 }

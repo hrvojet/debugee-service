@@ -3,6 +3,7 @@ package htrcak.backend.issues;
 import htrcak.backend.issues.data.IssueDTO;
 import htrcak.backend.issues.data.IssuePatchValidator;
 import htrcak.backend.issues.data.IssuePostValidator;
+import htrcak.backend.issues.data.IssueSearchCommand;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +23,18 @@ public class IssueController {
     public IssueController(IssueService issueService) { this.issueService = issueService; }
 
     @GetMapping
-    public List<IssueDTO> findAllIssues(@RequestParam(required = false) final Long projectId) {
-        if(projectId != null) {
-            return issueService.findAllByProjectId(projectId);
-        } else {
-            return issueService.findAll();
-        }
+    public List<IssueDTO> findAllIssues() {
+        return issueService.findAll();
     }
 
     @GetMapping("/{id}")
     public IssueDTO findIssueById(@PathVariable final Long id) {
         return issueService.findById(id);
+    }
+
+    @PostMapping("/search/{projectId}")
+    public List<IssueDTO> searchIssuesByProject(@PathVariable final long projectId, @Valid @RequestBody(required = false) IssueSearchCommand isc) {
+        return issueService.searchIssues(projectId, isc);
     }
 
     @PostMapping
