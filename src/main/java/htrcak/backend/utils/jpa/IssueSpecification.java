@@ -1,7 +1,7 @@
 package htrcak.backend.utils.jpa;
 
-import htrcak.backend.issues.Issue;
-import htrcak.backend.issues.data.IssueSearchCommand;
+import htrcak.backend.core.issues.Issue;
+import htrcak.backend.core.issues.data.IssueSearchCommand;
 import org.springframework.data.jpa.domain.Specification;
 
 public class IssueSpecification {
