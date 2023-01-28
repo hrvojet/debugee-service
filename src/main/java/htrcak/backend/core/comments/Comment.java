@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Comment {
 
+    // todo need to know which project comment belongs to
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

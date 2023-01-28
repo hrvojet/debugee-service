@@ -3,6 +3,7 @@ package htrcak.backend.core.user.model;
 import htrcak.backend.core.comments.Comment;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -61,4 +62,6 @@ public class User {
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
+
+    public String getAuthorities() {return "ROLE_ADMIN";}
 }

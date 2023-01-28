@@ -3,10 +3,12 @@ package htrcak.backend.core.projects;
 import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
+import htrcak.backend.security.ApplicationUser;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,7 +27,13 @@ public class ProjectController {
     }
 
     @GetMapping
-    public List<ProjectDTO> findAllProjects() { return projectService.findAll(); }
+    public List<ProjectDTO> findAllProjects() {
+        ApplicationUser applicationUser = (ApplicationUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // TODO servis
+        System.out.println(applicationUser.getUsername());
+        System.out.println(applicationUser.getId());
+        System.out.println(applicationUser.getEmail());
+        return projectService.findAll();
+    }
 
     @GetMapping("/{id}")
     public ProjectDTO findProjectById(@PathVariable final Long id) {

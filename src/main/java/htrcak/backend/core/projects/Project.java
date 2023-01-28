@@ -8,6 +8,7 @@ import java.util.Set;
 @Entity
 @Table(name = "project")
 public class Project {
+    // TODO visibility, owner
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
