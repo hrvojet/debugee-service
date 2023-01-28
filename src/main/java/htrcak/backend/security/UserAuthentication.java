@@ -1,10 +1,8 @@
 package htrcak.backend.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serial;
-import java.util.Collection;
 import java.util.Objects;
 
 public class UserAuthentication extends AbstractAuthenticationToken {
@@ -13,11 +11,11 @@ public class UserAuthentication extends AbstractAuthenticationToken {
     @Serial
     private static final long serialVersionUID = 8339339545314305767L;
 
-    private final ApplicationUser applicationUser;
+    private final ResourceRequester resourceRequester;
 
-    public UserAuthentication(ApplicationUser applicationUser) {
-        super(applicationUser.getAuthorities());
-        this.applicationUser = applicationUser;
+    public UserAuthentication(ResourceRequester resourceRequester) {
+        super(resourceRequester.getAuthorities());
+        this.resourceRequester = resourceRequester;
         setAuthenticated(true);
     }
 
@@ -28,11 +26,11 @@ public class UserAuthentication extends AbstractAuthenticationToken {
 
     @Override
     public Object getPrincipal() {
-        return applicationUser;
+        return resourceRequester;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), applicationUser);
+        return Objects.hash(super.hashCode(), resourceRequester);
     }
 }

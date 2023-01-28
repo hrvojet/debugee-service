@@ -1,12 +1,10 @@
 package htrcak.backend.security.services;
 
-import htrcak.backend.core.user.model.User;
-import htrcak.backend.security.ApplicationUser;
+import htrcak.backend.security.ResourceRequester;
 import htrcak.backend.security.UserAuthentication;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -41,8 +38,8 @@ public class JwtServiceImpl implements JwtService{
         if (isJwtInvalid(token)) {
             return false;
         }
-        ApplicationUser applicationUser = getUserDataFromJwt(token);
-        saveAuthentication(applicationUser);
+        ResourceRequester resourceRequester = getUserDataFromJwt(token);
+        saveAuthentication(resourceRequester);
         return true;
     }
 
@@ -92,7 +89,7 @@ public class JwtServiceImpl implements JwtService{
         return true;
     }
 
-    private ApplicationUser getUserDataFromJwt(String jwtToken) {
+    private ResourceRequester getUserDataFromJwt(String jwtToken) {
         Claims claims = Jwts
                 .parser()
                 .setSigningKey(signingKey)
@@ -104,17 +101,17 @@ public class JwtServiceImpl implements JwtService{
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        ApplicationUser applicationUser = new ApplicationUser();
-        applicationUser.setUsername(claims.get("username").toString());
-        applicationUser.setEmail(claims.get("email").toString());
-        applicationUser.setId(claims.getSubject());
-        applicationUser.setAuthorities(authorities);
+        ResourceRequester resourceRequester = new ResourceRequester();
+        resourceRequester.setUsername(claims.get("username").toString());
+        resourceRequester.setEmail(claims.get("email").toString());
+        resourceRequester.setId(claims.getSubject());
+        resourceRequester.setAuthorities(authorities);
 
-        return applicationUser;
+        return resourceRequester;
     }
 
-    private void saveAuthentication(ApplicationUser applicationUser) {
-        Authentication authentication = new UserAuthentication(applicationUser);
+    private void saveAuthentication(ResourceRequester resourceRequester) {
+        Authentication authentication = new UserAuthentication(resourceRequester);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

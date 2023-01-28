@@ -6,7 +6,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-public class ApplicationUser implements Serializable {
+public class ResourceRequester implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -437194705031980405L;
