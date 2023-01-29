@@ -26,7 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     static final String[] UNAUTHENTICATED_ENDPOINTS = new String[]{
             "/callback/**",
-            "/error/**"
+            "/error/**",
+            "/h2-console/**"
     };
 
     private final JWTFilter jwtFilter;
@@ -39,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
+                .headers().frameOptions().sameOrigin().and() // h2-console
                 .addFilterBefore(jwtFilter, BasicAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
