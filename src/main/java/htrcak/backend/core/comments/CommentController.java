@@ -36,7 +36,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CommentDTO> saveComment(@Valid @RequestBody final CommentPostValidator commentPostValidator) {
 
-        return commentService.saveNewIssue(commentPostValidator)
+        return commentService.saveNewComment(commentPostValidator)
                 .map(IssueDTO -> ResponseEntity
                         .status(HttpStatus.OK)
                         .body(IssueDTO))

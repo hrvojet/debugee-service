@@ -5,9 +5,9 @@ import htrcak.backend.core.comments.data.CommentPatchValidator;
 import htrcak.backend.core.comments.data.CommentPostValidator;
 import htrcak.backend.core.comments.data.CommentRepositoryJPA;
 import htrcak.backend.core.issues.data.IssueRepositoryJPA;
-import htrcak.backend.core.user.data.UserRepositoryJPA;
 import htrcak.backend.core.user.model.User;
 import htrcak.backend.core.user.model.UserDTO;
+import htrcak.backend.core.utilities.SecurityContextHolderUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,13 +19,14 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepositoryJPA commentRepositoryJPA;
 
-    private final UserRepositoryJPA userRepositoryJPA;
+    private final SecurityContextHolderUtils securityContextHolderUtils;
+
 
     private final IssueRepositoryJPA issueRepositoryJPA;
 
-    public CommentServiceImpl(CommentRepositoryJPA commentRepositoryJPA, UserRepositoryJPA userRepositoryJPA, IssueRepositoryJPA issueRepositoryJPA) {
+    public CommentServiceImpl(CommentRepositoryJPA commentRepositoryJPA, SecurityContextHolderUtils securityContextHolderUtils, IssueRepositoryJPA issueRepositoryJPA) {
         this.commentRepositoryJPA = commentRepositoryJPA;
-        this.userRepositoryJPA = userRepositoryJPA;
+        this.securityContextHolderUtils = securityContextHolderUtils;
         this.issueRepositoryJPA = issueRepositoryJPA;
     }
 
@@ -40,8 +41,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Optional<CommentDTO> saveNewIssue(CommentPostValidator commentPostValidator) {
-        return Optional.of(mapCommentToDTO(commentRepositoryJPA.save(new Comment(userRepositoryJPA.getById(commentPostValidator.getUserId()), commentPostValidator.getText(), issueRepositoryJPA.getById(commentPostValidator.getIssueId())))));
+    public Optional<CommentDTO> saveNewComment(CommentPostValidator commentPostValidator) {
+        return Optional.of(mapCommentToDTO(commentRepositoryJPA.save(new Comment(securityContextHolderUtils.getCurrentUser(), commentPostValidator.getText(), issueRepositoryJPA.getById(commentPostValidator.getIssueId())))));
     }
 
     @Override
@@ -68,10 +69,20 @@ public class CommentServiceImpl implements CommentService {
 
 
     private CommentDTO mapCommentToDTO(Comment comment) {
-        return new CommentDTO(comment.getId(), mapUserToDTO(comment.getUser()), comment.getText(), comment.getCreated(), comment.getEdited());
+        return new CommentDTO(
+                comment.getId(),
+                mapUserToDTO(comment.getUser()),
+                comment.getText(),
+                comment.getCreated(),
+                comment.getEdited()
+        );
     }
 
     private UserDTO mapUserToDTO(User user) {
-        return new UserDTO(user.getId(), user.getName(), user.getEmail());
+        return new UserDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
     }
 }

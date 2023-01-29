@@ -13,7 +13,7 @@ public interface CommentService {
 
     CommentDTO getById(Long id);
 
-    Optional<CommentDTO> saveNewIssue(CommentPostValidator commentPostValidator);
+    Optional<CommentDTO> saveNewComment(CommentPostValidator commentPostValidator);
 
     void deleteById(long commentId);
 

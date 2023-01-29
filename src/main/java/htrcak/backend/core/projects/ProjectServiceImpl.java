@@ -4,7 +4,6 @@ import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
 import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
-import htrcak.backend.core.user.data.UserRepositoryJPA;
 import htrcak.backend.core.utilities.SecurityContextHolderUtils;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +17,14 @@ public class ProjectServiceImpl implements ProjectService{
     private final ProjectRepositoryJPA projectRepositoryJPA;
     private final SecurityContextHolderUtils securityContextHolderUtils;
 
-    private final UserRepositoryJPA userRepositoryJPA;
-
-    public ProjectServiceImpl(ProjectRepositoryJPA projectRepositoryJPA, SecurityContextHolderUtils securityContextHolderUtils, UserRepositoryJPA userRepositoryJPA) {
+    public ProjectServiceImpl(ProjectRepositoryJPA projectRepositoryJPA, SecurityContextHolderUtils securityContextHolderUtils) {
         this.projectRepositoryJPA = projectRepositoryJPA;
         this.securityContextHolderUtils = securityContextHolderUtils;
-        this.userRepositoryJPA = userRepositoryJPA;
     }
 
 
     @Override
     public List<ProjectDTO> findAll() {
-        //return projectRepositoryJPA.findAllByOwner(userRepositoryJPA.getById(97L)).stream().map(this::mapProjectToDTO).collect(Collectors.toList()); // TODO briši, test
         return projectRepositoryJPA.findAll().stream().map(this::mapProjectToDTO).collect(Collectors.toList());
     }
 
