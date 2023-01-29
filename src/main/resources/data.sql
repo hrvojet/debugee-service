@@ -2,12 +2,15 @@ DELETE FROM issue;
 DELETE FROM project;
 DELETE FROM comment;
 
-INSERT INTO gitlab_user(id, username, email) VALUES (5, 'Reporter', 'reporter@asd.asd');
-INSERT INTO gitlab_user(id, username, email) VALUES (99, 'Hrva', 'hrva@va.hr');
+INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (5, 'Reporter', 'reporter@asd.asd', false);
+INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (3, 'developer', 'developer@example.com', false);
+INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (99, 'Hrva', 'hrva@va.hr', false);
+INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (98, 'Luca', 'luca@lu.ca', false);
+INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (97, 'Lero', 'lero@le.pl', false);
 
-INSERT INTO project(id, title, description, closed_issues, opened_issues) VALUES (1, 'Title 1', 'Description of the first project', 0, 0);
-INSERT INTO project(id, title, description, closed_issues, opened_issues) VALUES (2, 'Title 2', 'Description of the second project', 0, 0);
-INSERT INTO project(id, title, description, closed_issues, opened_issues) VALUES (3, 'Title 3', 'Description of the third project', 0, 0);
+INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (1, 99, 'Title 1', 'Description of the first project', 0, 0);
+INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (2, 98, 'Title 2', 'Description of the second project', 0, 0);
+INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (3, 97, 'Title 3', 'Description of the third project', 0, 0);
 
 INSERT INTO issue(id, title, comment_number, issue_type, project_id) VALUES (1, 'Problem with persistence', 0, 'Bug', 1);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 1;

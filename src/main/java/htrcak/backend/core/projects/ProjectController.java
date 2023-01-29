@@ -3,6 +3,7 @@ package htrcak.backend.core.projects;
 import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
+import htrcak.backend.core.utilities.SecurityContextHolderUtils;
 import htrcak.backend.security.ResourceRequester;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,17 +22,15 @@ import java.util.Map;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final SecurityContextHolderUtils securityContextHolderUtils;
 
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, SecurityContextHolderUtils securityContextHolderUtils) {
         this.projectService = projectService;
+        this.securityContextHolderUtils = securityContextHolderUtils;
     }
 
     @GetMapping
     public List<ProjectDTO> findAllProjects() {
-        ResourceRequester resourceRequester = (ResourceRequester) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // TODO servis
-        System.out.println(resourceRequester.getUsername());
-        System.out.println(resourceRequester.getId());
-        System.out.println(resourceRequester.getEmail());
         return projectService.findAll();
     }
 

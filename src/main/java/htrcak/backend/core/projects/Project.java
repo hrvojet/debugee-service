@@ -1,8 +1,10 @@
 package htrcak.backend.core.projects;
 
 import htrcak.backend.core.issues.Issue;
+import htrcak.backend.core.user.model.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -21,7 +23,6 @@ public class Project {
     private String description;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, orphanRemoval = true)
-    //@JsonIgnore
     private Set<Issue> issues;
 
     @Column
@@ -30,11 +31,17 @@ public class Project {
     @Column
     private int openedIssues;
 
-    public Project(String title, String description, int closedIssues, int openedIssues) {
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "owner")
+    @NotNull
+    private User owner;
+
+    public Project(String title, String description, int closedIssues, int openedIssues, User owner) {
         this.title = title;
         this.description = description;
         this.closedIssues = closedIssues;
         this.openedIssues = openedIssues;
+        this.owner = owner;
     }
 
     public Project() {}
@@ -85,5 +92,13 @@ public class Project {
 
     public void setOpenedIssues(int openedIssues) {
         this.openedIssues = openedIssues;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }

@@ -1,30 +1,51 @@
 package htrcak.backend.core.user.model;
 
 import htrcak.backend.core.comments.Comment;
+import htrcak.backend.core.projects.Project;
+import io.micrometer.core.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "gitlab_user")
-public class User {
+public class User implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -7466453060188825579L;
 
     @Id
+    @NotNull
     private long id;
 
     @Column
+    @NotNull
     private String username;
 
     @Column
+    @NotNull
     private String email;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private Set<Comment> comments;
+    @Column
+    @NotNull
+    private boolean isAdmin;
 
-    public User(String username, String email) {
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    private Set<Comment> comments = new HashSet<>();
+
+    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
+    private Set<Project> project = new HashSet<>();
+
+    public User(String username, String email, long id, boolean isAdmin) {
         this.username = username;
         this.email = email;
+        this.id = id;
+        this.isAdmin = isAdmin;
     }
 
     public User() {
@@ -63,5 +84,19 @@ public class User {
         this.comments = comments;
     }
 
-    public String getAuthorities() {return "ROLE_ADMIN";}
+    public Set<Project> getProjectOwner() {
+        return project;
+    }
+
+    public void setProjectOwner(Set<Project> projectOwner) {
+        this.project = projectOwner;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 }

@@ -1,5 +1,7 @@
 package htrcak.backend.security.services;
 
+import htrcak.backend.core.user.data.UserRepositoryJPA;
+import htrcak.backend.core.user.model.User;
 import htrcak.backend.security.ResourceRequester;
 import htrcak.backend.security.UserAuthentication;
 import io.jsonwebtoken.*;
@@ -26,10 +28,13 @@ public class JwtServiceImpl implements JwtService{
     private final String signingKey = "signingKeyForSigningJWTtokens";
     private final RestTemplate restTemplate;
 
+    private final UserRepositoryJPA userRepositoryJPA;
+
     private String gitLabUri;
 
-    public JwtServiceImpl(RestTemplate restTemplate) {
+    public JwtServiceImpl(RestTemplate restTemplate, UserRepositoryJPA userRepositoryJPA) {
         this.restTemplate = restTemplate;
+        this.userRepositoryJPA = userRepositoryJPA;
     }
 
 
@@ -56,14 +61,24 @@ public class JwtServiceImpl implements JwtService{
         String isAdmin = (response.getBody() != null && response.getBody().get("is_admin") != null && (boolean)response.getBody().get("is_admin")) ? "ADMIN" : "";
         //Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret), SignatureAlgorithm.HS512.getJcaName());
 
+        saveUserIfNotExists(new User(
+                response.getBody().get("username").toString(),
+                response.getBody().get("email").toString(),
+                Long.parseLong(response.getBody().get("id").toString()),
+                isAdmin.compareTo("") != 0));
+
         return Jwts.builder()
                 .setSubject(response.getBody().get("id").toString())
                 .claim("username", response.getBody().get("username").toString())
                 .claim("email", response.getBody().get("email"))
                 .claim("authorities", isAdmin.compareTo("") == 0 ? Collections.emptyList() : isAdmin)
-                .setExpiration(new Date(System.currentTimeMillis() + 7000000))
+                .setExpiration(new Date(System.currentTimeMillis() + 700000000))
                 .signWith(SignatureAlgorithm.HS512, signingKey)
                 .compact();
+    }
+
+    private void saveUserIfNotExists(User user) {
+        userRepositoryJPA.save(user);
     }
 
     private boolean isJwtInvalid(String jwtToken) {

@@ -1,16 +1,18 @@
 CREATE TABLE IF NOT EXISTS gitlab_user(
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT PRIMARY KEY,
     username VARCHAR(256) NOT NULL,
-    email VARCHAR(256)NOT NULL
+    email VARCHAR(256) NOT NULL,
+    is_admin BOOLEAN NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS project (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    /*owner INT NOT NULL,*/
+    owner INT NOT NULL,
     title VARCHAR(256) NOT NULL,
     description VARCHAR(512) NOT NULL,
     closed_issues INT NOT NULL,
-    opened_issues INT NOT NULL
+    opened_issues INT NOT NULL,
+    FOREIGN KEY (owner) REFERENCES gitlab_user(id)
     );
 
 CREATE TABLE IF NOT EXISTS issue (
