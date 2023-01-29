@@ -12,19 +12,19 @@ INSERT INTO project(id, owner, title, description, closed_issues, opened_issues)
 INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (2, 98, 'Title 2', 'Description of the second project', 0, 0);
 INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (3, 97, 'Title 3', 'Description of the third project', 0, 0);
 
-INSERT INTO issue(id, title, comment_number, issue_type, project_id) VALUES (1, 'Problem with persistence', 0, 'Bug', 1);
+INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (1, 5, 'Problem with persistence', 0, 'Bug', 1);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 1;
 
-INSERT INTO issue(id, title, comment_number, issue_type, project_id) VALUES (2, 'Unable to install dependency', 0, 'Feature', 1);
+INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (2, 5, 'Unable to install dependency', 0, 'Feature', 1);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 1;
 
-INSERT INTO issue(id, title, comment_number, issue_type, project_id) VALUES (3, 'We need better', 0, 'Feature', 1);
+INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (3, 5, 'We need better', 0, 'Feature', 1);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 1;
 
-INSERT INTO issue(id, title, comment_number, issue_type, project_id) VALUES (4, 'How to uninstall dependency', 0, 'Feature', 1);
+INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (4, 5, 'How to uninstall dependency', 0, 'Feature', 1);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 1;
 
-INSERT INTO issue(id, title, comment_number, issue_type, project_id) VALUES (5, 'We need better solution', 0, 'Feature', 2);
+INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (5, 5, 'We need better solution', 0, 'Feature', 2);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 2;
 
 INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (1, 5, 'This is some long text that is here, bla bla...', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1);

@@ -23,7 +23,7 @@ public class ProjectDTO {
         this.description = description;
         this.closedIssues = closedIssues;
         this.openedIssues = openedIssues;
-        this.owner = new UserDTO(owner.getId(), owner.getName(), owner.getEmail());
+        this.owner = new UserDTO(owner.getId(), owner.getName(), owner.getEmail()); // todo -> maybe not mix entities? pass dto, handle it out of the constructor
     }
 
     public long getId() {

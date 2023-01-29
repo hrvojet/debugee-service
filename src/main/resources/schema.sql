@@ -21,8 +21,10 @@ CREATE TABLE IF NOT EXISTS issue (
     comment_number INT NOT NULL,
     issue_type VARCHAR(32) NOT NULL,
     project_id INT NOT NULL,
+    original_poster INT NOT NULL,
     status VARCHAR(45),
-    FOREIGN KEY (project_id) REFERENCES project(id)
+    FOREIGN KEY (project_id) REFERENCES project(id),
+    FOREIGN KEY (original_poster) REFERENCES gitlab_user(id)
 );
 
 CREATE TABLE IF NOT EXISTS comment (

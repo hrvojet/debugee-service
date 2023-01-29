@@ -1,6 +1,7 @@
 package htrcak.backend.core.user.model;
 
 import htrcak.backend.core.comments.Comment;
+import htrcak.backend.core.issues.Issue;
 import htrcak.backend.core.projects.Project;
 import io.micrometer.core.lang.Nullable;
 
@@ -40,6 +41,9 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     private Set<Project> project = new HashSet<>();
+
+    @OneToMany(mappedBy = "originalPoster", fetch = FetchType.LAZY)
+    private Set<Issue> issues = new HashSet<>();
 
     public User(String username, String email, long id, boolean isAdmin) {
         this.username = username;
@@ -98,5 +102,13 @@ public class User implements Serializable {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public Set<Issue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(Set<Issue> issues) {
+        this.issues = issues;
     }
 }

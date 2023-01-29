@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(UNAUTHENTICATED_ENDPOINTS).permitAll()
-                .antMatchers("/issues/**").hasAuthority("ADMIN")
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

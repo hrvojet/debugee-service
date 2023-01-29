@@ -2,8 +2,10 @@ package htrcak.backend.core.issues;
 
 import htrcak.backend.core.comments.Comment;
 import htrcak.backend.core.projects.Project;
+import htrcak.backend.core.user.model.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Set;
 
@@ -29,6 +31,11 @@ public class Issue {
 
     @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Comment> comments;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "originalPoster")
+    @NotNull
+    private User originalPoster;
 
     public Issue() {
     }
@@ -93,5 +100,13 @@ public class Issue {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public User getOriginalPoster() {
+        return originalPoster;
+    }
+
+    public void setOriginalPoster(User originalPoster) {
+        this.originalPoster = originalPoster;
     }
 }

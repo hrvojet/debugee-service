@@ -76,7 +76,7 @@ public class IssueServiceImpl implements IssueService{
     }
 
     private IssueDTO mapIssueToDTO(Issue issue) {
-        return new IssueDTO(issue.getId(), issue.getProject().getId(), issue.getTitle(), issue.getCommentNumber(), issue.getIssueType());
+        return new IssueDTO(issue.getId(), issue.getProject().getId(), issue.getTitle(), issue.getCommentNumber(), issue.getIssueType(), issue.getOriginalPoster());
     }
 
     private List<IssueDTO> convertToDTOList(List<Issue> issueList) {
