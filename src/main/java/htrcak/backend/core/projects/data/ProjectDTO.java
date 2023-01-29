@@ -1,5 +1,8 @@
 package htrcak.backend.core.projects.data;
 
+import htrcak.backend.core.user.model.User;
+import htrcak.backend.core.user.model.UserDTO;
+
 public class ProjectDTO {
 
     private long id;
@@ -12,12 +15,15 @@ public class ProjectDTO {
 
     private int closedIssues;
 
-    public ProjectDTO(long id, String title, String description, int openedIssues, int closedIssues) {
+    private UserDTO owner;
+
+    public ProjectDTO(long id, String title, String description, int openedIssues, int closedIssues, User owner) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.closedIssues = closedIssues;
         this.openedIssues = openedIssues;
+        this.owner = new UserDTO(owner.getId(), owner.getName(), owner.getEmail());
     }
 
     public long getId() {
@@ -36,5 +42,9 @@ public class ProjectDTO {
 
     public int getClosedIssues() {
         return closedIssues;
+    }
+
+    public UserDTO getOwner() {
+        return owner;
     }
 }
