@@ -7,7 +7,7 @@ import htrcak.backend.core.comments.data.CommentRepositoryJPA;
 import htrcak.backend.core.issues.data.IssueRepositoryJPA;
 import htrcak.backend.core.user.model.User;
 import htrcak.backend.core.user.model.UserDTO;
-import htrcak.backend.core.utilities.SecurityContextHolderUtils;
+import htrcak.backend.utils.SecurityContextHolderUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package htrcak.backend.core.exceptions;
+package htrcak.backend.exceptions;
 
 import java.io.Serial;
 

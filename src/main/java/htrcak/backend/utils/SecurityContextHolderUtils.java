@@ -1,6 +1,6 @@
-package htrcak.backend.core.utilities;
+package htrcak.backend.utils;
 
-import htrcak.backend.core.exceptions.UserNotFoundException;
+import htrcak.backend.exceptions.UserNotFoundException;
 import htrcak.backend.core.user.UserService;
 import htrcak.backend.core.user.model.User;
 import htrcak.backend.security.ResourceRequester;

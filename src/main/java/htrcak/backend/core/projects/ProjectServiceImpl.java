@@ -4,7 +4,7 @@ import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
 import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
-import htrcak.backend.core.utilities.SecurityContextHolderUtils;
+import htrcak.backend.utils.SecurityContextHolderUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
