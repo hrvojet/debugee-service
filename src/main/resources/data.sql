@@ -2,6 +2,7 @@ DELETE FROM issue;
 DELETE FROM project;
 DELETE FROM comment;
 
+INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (7, 'debugee', 'de@bug.e', true);
 INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (5, 'Reporter', 'reporter@asd.asd', false);
 INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (3, 'developer', 'developer@example.com', false);
 INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (99, 'Hrva', 'hrva@va.hr', false);
