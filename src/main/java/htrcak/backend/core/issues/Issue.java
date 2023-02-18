@@ -40,10 +40,11 @@ public class Issue {
     public Issue() {
     }
 
-    public Issue(Project project, String title, String issueType) {
+    public Issue(Project project, String title, String issueType, User op) {
         this.project = project;
         this.title = title;
         this.issueType = Objects.requireNonNullElse(issueType, "");
+        this.originalPoster = op;
     }
 
     public long getId() {

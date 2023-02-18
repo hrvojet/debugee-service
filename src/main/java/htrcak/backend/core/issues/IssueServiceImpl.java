@@ -2,7 +2,7 @@ package htrcak.backend.core.issues;
 
 import htrcak.backend.core.issues.data.*;
 import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
-import org.springframework.beans.factory.annotation.Autowired;
+import htrcak.backend.core.utilities.SecurityContextHolderUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +17,14 @@ public class IssueServiceImpl implements IssueService{
 
     private final IssueRepositoryJPA issueRepositoryJPA;
 
-    @Autowired
-    private ProjectRepositoryJPA projectRepositoryJPA;
+    private final SecurityContextHolderUtils securityContextHolderUtils;
 
-    public IssueServiceImpl(IssueRepositoryJPA issueRepositoryJPA) {
+    private final ProjectRepositoryJPA projectRepositoryJPA;
+
+    public IssueServiceImpl(IssueRepositoryJPA issueRepositoryJPA, SecurityContextHolderUtils securityContextHolderUtils, ProjectRepositoryJPA projectRepositoryJPA) {
         this.issueRepositoryJPA = issueRepositoryJPA;
+        this.securityContextHolderUtils = securityContextHolderUtils;
+        this.projectRepositoryJPA = projectRepositoryJPA;
     }
 
 
@@ -45,7 +48,12 @@ public class IssueServiceImpl implements IssueService{
 
     @Override
     public Optional<IssueDTO> saveNewIssue(IssuePostValidator issuePostValidator) {
-        return Optional.of(mapIssueToDTO(issueRepositoryJPA.save(new Issue(projectRepositoryJPA.getById(issuePostValidator.getProjectId()), issuePostValidator.getTitle(), issuePostValidator.getIssueType()))));
+        return Optional.of(mapIssueToDTO(issueRepositoryJPA.save(new Issue(
+                projectRepositoryJPA.getById(issuePostValidator.getProjectId()),
+                issuePostValidator.getTitle(),
+                issuePostValidator.getIssueType(),
+                securityContextHolderUtils.getCurrentUser()
+                ))));
     }
 
     @Override
