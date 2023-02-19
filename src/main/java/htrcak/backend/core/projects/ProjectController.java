@@ -3,7 +3,6 @@ package htrcak.backend.core.projects;
 import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
-import htrcak.backend.utils.SecurityContextHolderUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,11 +19,9 @@ import java.util.Map;
 public class ProjectController {
 
     private final ProjectService projectService;
-    private final SecurityContextHolderUtils securityContextHolderUtils;
 
-    public ProjectController(ProjectService projectService, SecurityContextHolderUtils securityContextHolderUtils) {
+    public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
-        this.securityContextHolderUtils = securityContextHolderUtils;
     }
 
     @GetMapping
