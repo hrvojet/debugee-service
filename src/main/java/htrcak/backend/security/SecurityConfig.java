@@ -13,7 +13,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import javax.servlet.http.HttpServletResponse;
 
-@Profile("prod")
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
