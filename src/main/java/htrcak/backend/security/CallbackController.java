@@ -47,21 +47,25 @@ public class CallbackController {
     }
 
     private String exchangeCodeForAccessToken(String code) {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("code", code);
-        params.add("client_id", clientId);
-        params.add("redirect_uri", callbackUrl);
-        params.add("grant_type", "authorization_code");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(generateParams(code), headers);
 
         ResponseEntity<Map> response = restTemplate.postForEntity("http://192.168.99.101/oauth/token", request, Map.class); // TODO replace GL url with app.prop value
         System.out.println(response.getBody());
 
         return jwtService.generateJWT((String) response.getBody().get("access_token")); // TODO handle error for emptyBody
 
+    }
+
+    private MultiValueMap<String, String> generateParams(String code) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("code", code);
+        params.add("client_id", clientId);
+        params.add("redirect_uri", callbackUrl);
+        params.add("grant_type", "authorization_code");
+        return params;
     }
 }
