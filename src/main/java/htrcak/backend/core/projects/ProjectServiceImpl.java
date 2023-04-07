@@ -5,9 +5,15 @@ import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
 import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
 import htrcak.backend.utils.SecurityContextHolderUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,8 +52,24 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public void deleteById(long id) {
-        this.projectRepositoryJPA.deleteById(id);
+    public ResponseEntity<?> deleteById(long id) {
+
+        try {
+            long projectForDeletionId = this.projectRepositoryJPA.getById(id).getOwner().getId();
+            if (projectForDeletionId == securityContextHolderUtils.getCurrentUser().getId() || securityContextHolderUtils.getCurrentUser().isAdmin()) {
+                this.projectRepositoryJPA.deleteById(id);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        } catch (EmptyResultDataAccessException | EntityNotFoundException e) {
+                Map<String,String> json = new HashMap<>();
+                json.put("projectID",Long.toString(id));
+                json.put("error","No project with such ID");
+                return new ResponseEntity<>(json, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @Override
