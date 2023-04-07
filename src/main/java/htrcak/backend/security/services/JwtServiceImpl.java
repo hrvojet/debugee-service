@@ -111,16 +111,18 @@ public class JwtServiceImpl implements JwtService{
                 .parseClaimsJws(jwtToken)
                 .getBody();
 
-        List<SimpleGrantedAuthority> authorities = Arrays
-                .stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .toList();
-
         ResourceRequester resourceRequester = new ResourceRequester();
         resourceRequester.setUsername(claims.get("username").toString());
         resourceRequester.setEmail(claims.get("email").toString());
         resourceRequester.setId(claims.getSubject());
-        resourceRequester.setAuthorities(authorities);
+
+        if (claims.get(AUTHORITIES_KEY).toString().contains(",")) {
+            List<SimpleGrantedAuthority> authorities = Arrays
+                    .stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                    .map(SimpleGrantedAuthority::new)
+                    .toList();
+            resourceRequester.setAuthorities(authorities);
+        }
 
         return resourceRequester;
     }
