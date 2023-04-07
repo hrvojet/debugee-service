@@ -135,6 +135,18 @@ class ProjectControllerTest {
     }
 
     @Test
+    @Order(28)
+    void deleteProjectAsNonOwner() throws Exception {
+        this.mockMvc.perform(
+                        delete("/projects/4")
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenRegular)
+                )
+                .andExpect(status().isForbidden())
+                .andDo(print());
+
+    }
+
+    @Test
     @Order(30)
     void deleteProject() throws Exception {
         this.mockMvc.perform(
@@ -143,6 +155,15 @@ class ProjectControllerTest {
         )
                 .andExpect(status().isNoContent())
                 .andDo(print());
+    }
+
+    @Test
+    void unauthorized() throws Exception {
+        this.mockMvc.perform(
+                get("/projects")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer badJwt")
+        )
+                .andExpect(status().isUnauthorized());
     }
 
 }

@@ -20,7 +20,7 @@ public class UtilsTest {
 
     public static String generateRegularAccessToken() {
         return Jwts.builder()
-                .setSubject(String.valueOf(7))
+                .setSubject(String.valueOf(3))
                 .claim("username", "developer")
                 .claim("email", "developer@example.com")
                 .claim("authorities", "")
