@@ -35,44 +35,17 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity<CommentDTO> saveComment(@Valid @RequestBody final CommentPostValidator commentPostValidator) {
-
-        return commentService.saveNewComment(commentPostValidator)
-                .map(IssueDTO -> ResponseEntity
-                        .status(HttpStatus.OK)
-                        .body(IssueDTO))
-                .orElseGet(
-                        () -> ResponseEntity
-                                .status(HttpStatus.NO_CONTENT)
-                                .build()
-                );
+        return commentService.saveNewComment(commentPostValidator);
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Map<String,String>> delete(@PathVariable long commentId) {
-        try{
-            commentService.deleteById(commentId);
-        } catch (EmptyResultDataAccessException e) {
-            Map<String,String> json = new HashMap<>();
-            json.put("projectID",Long.toString(commentId));
-            json.put("error","No comment with such ID");
-            return new ResponseEntity<>(json, HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> delete(@PathVariable long commentId) {
+        return commentService.deleteById(commentId);
     }
 
     @PatchMapping("/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable final long commentId, @Valid @RequestBody final CommentPatchValidator commentPatchValidator) {
-
-        return commentService.updateById(commentId, commentPatchValidator)
-                .map(IssueDTO -> ResponseEntity
-                        .status(HttpStatus.OK)
-                        .body(IssueDTO))
-                .orElseGet(
-                        () -> ResponseEntity
-                                .status(HttpStatus.NO_CONTENT)
-                                .build()
-                );
+        return commentService.updateById(commentId, commentPatchValidator);
     }
 
 }

@@ -3,6 +3,7 @@ package htrcak.backend.core.comments;
 import htrcak.backend.core.comments.data.CommentDTO;
 import htrcak.backend.core.comments.data.CommentPatchValidator;
 import htrcak.backend.core.comments.data.CommentPostValidator;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +14,9 @@ public interface CommentService {
 
     CommentDTO getById(Long id);
 
-    Optional<CommentDTO> saveNewComment(CommentPostValidator commentPostValidator);
+    ResponseEntity<CommentDTO> saveNewComment(CommentPostValidator commentPostValidator);
 
-    void deleteById(long commentId);
+    ResponseEntity<?> deleteById(long commentId);
 
-    Optional<CommentDTO> updateById(long commentId, CommentPatchValidator commentPatchValidator);
+    ResponseEntity<CommentDTO> updateById(long commentId, CommentPatchValidator commentPatchValidator);
 }

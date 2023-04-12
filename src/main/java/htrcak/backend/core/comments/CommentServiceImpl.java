@@ -8,14 +8,21 @@ import htrcak.backend.core.issues.data.IssueRepositoryJPA;
 import htrcak.backend.core.user.model.User;
 import htrcak.backend.core.user.model.UserDTO;
 import htrcak.backend.utils.SecurityContextHolderUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements CommentService {
+
+    Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
 
     private final CommentRepositoryJPA commentRepositoryJPA;
 
@@ -41,29 +48,51 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Optional<CommentDTO> saveNewComment(CommentPostValidator commentPostValidator) {
-        return Optional.of(mapCommentToDTO(commentRepositoryJPA.save(new Comment(securityContextHolderUtils.getCurrentUser(), commentPostValidator.getText(), issueRepositoryJPA.getById(commentPostValidator.getIssueId())))));
+    public ResponseEntity<CommentDTO> saveNewComment(CommentPostValidator commentPostValidator) {
+        return new ResponseEntity<>(
+            mapCommentToDTO(commentRepositoryJPA.save(
+                new Comment(
+                    securityContextHolderUtils.getCurrentUser(),
+                    commentPostValidator.getText(),
+                    issueRepositoryJPA.getById(commentPostValidator.getIssueId())))),
+            HttpStatus.CREATED);
     }
 
     @Override
-    public void deleteById(long commentId) {
-        this.commentRepositoryJPA.deleteById(commentId);
+    public ResponseEntity<?> deleteById(long commentId) {
+        long commentForDeletion = this.commentRepositoryJPA.getById(commentId).getUser().getId();
+        if (commentForDeletion == securityContextHolderUtils.getCurrentUser().getId() || securityContextHolderUtils.getCurrentUser().isAdmin()) {
+            this.commentRepositoryJPA.deleteById(commentId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        logger.warn(MessageFormat.format("User with ID {0} not allowed to delete comment with ID {1}", securityContextHolderUtils.getCurrentUser().getId(), commentId));
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
     }
 
     @Override
-    public Optional<CommentDTO> updateById(long commentId, CommentPatchValidator commentPatchValidator) {
-        Comment c = commentRepositoryJPA.getById(commentId);
+    public ResponseEntity<CommentDTO> updateById(long commentId, CommentPatchValidator commentPatchValidator) { //Todo možda vraćati responseEntityje<?>...?
+        Optional<Comment> comment = commentRepositoryJPA.findById(commentId);
+        if(comment.isEmpty()) {
+            logger.warn(MessageFormat.format("There is no comment with id [{0}]", commentId));
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (comment.get().getUser().getId() != securityContextHolderUtils.getCurrentUser().getId()) {
+            logger.warn(MessageFormat.format("User with ID [{0}] not allowed to modify comment with ID [{1}]", securityContextHolderUtils.getCurrentUser().getId(), commentId));
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         boolean commentIsUpdated = false;
-
-        if(commentPatchValidator.getText() != null && !commentPatchValidator.getText().isBlank() && !commentPatchValidator.getText().equals(c.getText())) {
-            c.setText(commentPatchValidator.getText());
+        if(commentPatchValidator.getText() != null && !commentPatchValidator.getText().isBlank() && !commentPatchValidator.getText().equals(comment.get().getText())) {
+            comment.get().setText(commentPatchValidator.getText());
             commentIsUpdated = true;
         }
 
         if(commentIsUpdated) {
-            return Optional.of(mapCommentToDTO(commentRepositoryJPA.save(c)));
+            return new ResponseEntity<>(mapCommentToDTO(commentRepositoryJPA.save(comment.get())), HttpStatus.OK);
         } else {
-            return Optional.empty();
+            logger.debug(MessageFormat.format("No change applied to comment with {0} ID", commentId));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
