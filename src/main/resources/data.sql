@@ -12,6 +12,7 @@ INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (97, 'Lero', 'lero
 INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (1, 99, 'Title 1', 'Description of the first project', 0, 0);
 INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (2, 98, 'Title 2', 'Description of the second project', 0, 0);
 INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (3, 97, 'Title 3', 'Description of the third project', 0, 0);
+INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (4, 3, 'Devs project', 'DEV dev', 0, 0);
 
 INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (1, 5, 'Problem with persistence', 0, 'Bug', 1);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 1;

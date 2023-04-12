@@ -7,8 +7,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,7 +35,7 @@ class ProjectControllerTest {
 
     @Test
     @Order(10)
-    void findAllProjects() throws Exception {
+    void Get_a_list_of_all_projects() throws Exception {
         this.mockMvc.perform(
                 get("/projects")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
@@ -50,7 +48,7 @@ class ProjectControllerTest {
 
     @Test
     @Order(15)
-    void findProjectById() throws Exception {
+    void Get_a_project_by_ID() throws Exception {
         this.mockMvc.perform(
                         get("/projects/1")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
@@ -75,7 +73,7 @@ class ProjectControllerTest {
 
     @Test
     @Order(20)
-    void saveNewProject() throws Exception {
+    void Save_new_project() throws Exception {
         this.mockMvc.perform(
                 post("/projects")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
@@ -91,7 +89,7 @@ class ProjectControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("""
                     {
-                        "id": 4,
+                        "id": 5,
                         "title": "Title of a new project",
                         "description": "Description of a new project",
                         "openedIssues": 0,
@@ -106,9 +104,9 @@ class ProjectControllerTest {
 
     @Test
     @Order(25)
-    void updateProject() throws Exception {
+    void Update_existing_project() throws Exception {
         this.mockMvc.perform(
-                        patch("/projects/4")
+                        patch("/projects/5")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
@@ -121,7 +119,7 @@ class ProjectControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("""
                         {
-                            "id": 4,
+                            "id": 5,
                             "title": "Title of a new project",
                             "description": "description UPDATED",
                             "openedIssues": 0,
@@ -135,10 +133,21 @@ class ProjectControllerTest {
     }
 
     @Test
-    @Order(28)
-    void deleteProjectAsNonOwner() throws Exception {
+    @Order(27)
+    void Handle_trying_to_delete_non_existing_project() throws Exception {
         this.mockMvc.perform(
-                        delete("/projects/4")
+                        delete("/projects/44")
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenRegular)
+                )
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @Order(28)
+    void Fail_to_delete_project_as_non_owner() throws Exception {
+        this.mockMvc.perform(
+                        delete("/projects/5")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenRegular)
                 )
                 .andExpect(status().isForbidden())
@@ -148,9 +157,9 @@ class ProjectControllerTest {
 
     @Test
     @Order(30)
-    void deleteProject() throws Exception {
+    void Delete_project() throws Exception {
         this.mockMvc.perform(
-                delete("/projects/4")
+                delete("/projects/5")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
         )
                 .andExpect(status().isNoContent())
@@ -158,7 +167,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void unauthorized() throws Exception {
+    void Fail_to_fetch_projects_without_authorization() throws Exception {
         this.mockMvc.perform(
                 get("/projects")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer badJwt")
