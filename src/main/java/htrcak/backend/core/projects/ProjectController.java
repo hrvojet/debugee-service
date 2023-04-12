@@ -3,16 +3,12 @@ package htrcak.backend.core.projects;
 import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("projects")
@@ -36,16 +32,7 @@ public class ProjectController {
 
     @PostMapping
     public ResponseEntity<ProjectDTO> saveProject(@Valid @RequestBody final ProjectPostValidator projectPost) {
-        return projectService.saveNewProject(projectPost)
-                .map(
-                        ProjectDTO -> ResponseEntity
-                                .status(HttpStatus.CREATED)
-                                .body(ProjectDTO)
-                ).orElseGet(
-                        () -> ResponseEntity
-                                .status(HttpStatus.BAD_REQUEST)
-                                .build()
-                );
+        return projectService.saveNewProject(projectPost);
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -54,18 +41,8 @@ public class ProjectController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProjectDTO> updateProject(@Valid @RequestBody final ProjectPatchValidator projectPost, @PathVariable final long id) {
-        // TODO javax.persistence.EntityNotFoundException
-        // https://www.baeldung.com/exception-handling-for-rest-with-spring
-        return projectService.updateById(projectPost, id)
-                .map(ProjectDTO -> ResponseEntity
-                        .status(HttpStatus.OK)
-                        .body(ProjectDTO))
-                .orElseGet(
-                        () -> ResponseEntity
-                                .status(HttpStatus.NO_CONTENT)
-                                .build()
-                );
+    public ResponseEntity<?> updateProject(@Valid @RequestBody final ProjectPatchValidator projectPost, @PathVariable final long id) {
+        return projectService.updateById(projectPost, id);
     }
 
 }

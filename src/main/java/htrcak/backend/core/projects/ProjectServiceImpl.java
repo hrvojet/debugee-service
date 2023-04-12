@@ -5,20 +5,21 @@ import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
 import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
 import htrcak.backend.utils.SecurityContextHolderUtils;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.HashMap;
+import java.text.MessageFormat;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService{
+
+    Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
     private final ProjectRepositoryJPA projectRepositoryJPA;
     private final SecurityContextHolderUtils securityContextHolderUtils;
@@ -40,56 +41,55 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public Optional<ProjectDTO> saveNewProject(ProjectPostValidator projectPost) {
+    public ResponseEntity<ProjectDTO> saveNewProject(ProjectPostValidator projectPost) {
         Project saved = this.projectRepositoryJPA.save(new Project(
                 projectPost.getTitle(),
                 projectPost.getDescription(),
                 0,
                 0,
                 securityContextHolderUtils.getCurrentUser()));
-
-        return Optional.of(mapProjectToDTO(saved));
+            return new ResponseEntity<>(mapProjectToDTO(saved), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<?> deleteById(long id) {
 
-        try {
-            long projectForDeletionId = this.projectRepositoryJPA.getById(id).getOwner().getId();
-            if (projectForDeletionId == securityContextHolderUtils.getCurrentUser().getId() || securityContextHolderUtils.getCurrentUser().isAdmin()) {
-                this.projectRepositoryJPA.deleteById(id);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-        } catch (EmptyResultDataAccessException | EntityNotFoundException e) {
-                Map<String,String> json = new HashMap<>();
-                json.put("projectID",Long.toString(id));
-                json.put("error","No project with such ID");
-                return new ResponseEntity<>(json, HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        long projectForDeletionOwnerId = this.projectRepositoryJPA.getById(id).getOwner().getId();
+        if (projectForDeletionOwnerId == securityContextHolderUtils.getCurrentUser().getId() || securityContextHolderUtils.getCurrentUser().isAdmin()) {
+            this.projectRepositoryJPA.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
+        logger.warn(MessageFormat.format("User with id {0} not allowed to delete project with id {1}", securityContextHolderUtils.getCurrentUser().getId(), id));
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @Override
-    public Optional<ProjectDTO> updateById(ProjectPatchValidator projectPatchValidator, long id) {
-        Project p = this.projectRepositoryJPA.getById(id);
+    public ResponseEntity<?> updateById(ProjectPatchValidator projectPatchValidator, long id) {
+        Optional<Project> project = this.projectRepositoryJPA.findById(id);
+        if (project.isEmpty()) {
+            logger.warn(MessageFormat.format("There is no project with id [{0}]", id));
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (project.get().getOwner().getId() != securityContextHolderUtils.getCurrentUser().getId()) {
+            logger.warn(MessageFormat.format("User with id [{0}] not allowed to modify project with id [{1}]", securityContextHolderUtils.getCurrentUser().getId(), id));
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         boolean projectIsUpdated = false;
-
-        if(projectPatchValidator.getDescription() != null && !projectPatchValidator.getDescription().isBlank() && !projectPatchValidator.getDescription().equals(p.getDescription())) {
-            p.setDescription(projectPatchValidator.getDescription());
+        if (projectPatchValidator.getDescription() != null && !projectPatchValidator.getDescription().isBlank() && !projectPatchValidator.getDescription().equals(project.get().getDescription())) {
+            project.get().setDescription(projectPatchValidator.getDescription());
             projectIsUpdated = true;
         }
-        if(projectPatchValidator.getTitle() != null && !projectPatchValidator.getTitle().isBlank() && !projectPatchValidator.getTitle().equals(p.getTitle())) {
-            p.setTitle(projectPatchValidator.getTitle());
+        if (projectPatchValidator.getTitle() != null && !projectPatchValidator.getTitle().isBlank() && !projectPatchValidator.getTitle().equals(project.get().getTitle())) {
+            project.get().setTitle(projectPatchValidator.getTitle());
             projectIsUpdated = true;
         }
 
-        if(projectIsUpdated) {
-            return Optional.of(mapProjectToDTO(this.projectRepositoryJPA.save(p)));
+        if (projectIsUpdated) {
+            return new ResponseEntity<>(mapProjectToDTO(this.projectRepositoryJPA.save(project.get())), HttpStatus.OK);
         } else {
-            return Optional.empty();
+            logger.debug(MessageFormat.format("No change applied to project with {0} ID", id));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
