@@ -197,7 +197,7 @@ public class IssueControllerTest {
 
     @Test
     @Order(28)
-    void Fail_to_delete_project_as_non_owner() throws Exception {
+    void Fail_to_delete_issue_as_non_owner() throws Exception {
         this.mockMvc.perform(
                         delete("/issues/6")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenRegular)
@@ -209,7 +209,7 @@ public class IssueControllerTest {
 
     @Test
     @Order(30)
-    void Delete_project() throws Exception {
+    void Delete_issue() throws Exception {
         this.mockMvc.perform(
                         delete("/issues/6")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
@@ -219,7 +219,7 @@ public class IssueControllerTest {
     }
 
     @Test
-    void Fail_to_fetch_projects_without_authorization() throws Exception {
+    void Fail_to_fetch_issues_without_authorization() throws Exception {
         this.mockMvc.perform(
                         get("/issues")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer badJwt")
