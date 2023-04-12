@@ -3,8 +3,13 @@ package htrcak.backend.core.issues;
 import htrcak.backend.core.issues.data.*;
 import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
 import htrcak.backend.utils.SecurityContextHolderUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,7 +18,9 @@ import static htrcak.backend.utils.jpa.IssueSpecification.*;
 import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
-public class IssueServiceImpl implements IssueService{
+public class IssueServiceImpl implements IssueService {
+
+    Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
 
     private final IssueRepositoryJPA issueRepositoryJPA;
 
@@ -47,39 +54,56 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
-    public Optional<IssueDTO> saveNewIssue(IssuePostValidator issuePostValidator) {
-        return Optional.of(mapIssueToDTO(issueRepositoryJPA.save(new Issue(
+    public ResponseEntity<IssueDTO> saveNewIssue(IssuePostValidator issuePostValidator) {
+        return new ResponseEntity<>(mapIssueToDTO(issueRepositoryJPA.save(new Issue(
                 projectRepositoryJPA.getById(issuePostValidator.getProjectId()),
                 issuePostValidator.getTitle(),
                 issuePostValidator.getIssueType(),
                 securityContextHolderUtils.getCurrentUser()
-                ))));
+                ))), HttpStatus.CREATED);
     }
 
     @Override
-    public void deleteById(long issueId) {
-        this.issueRepositoryJPA.deleteById(issueId);
+    public ResponseEntity<?> deleteById(long issueId) {
+
+        long issueForDeletionID = this.issueRepositoryJPA.getById(issueId).getOriginalPoster().getId();
+        if (issueForDeletionID == securityContextHolderUtils.getCurrentUser().getId() || securityContextHolderUtils.getCurrentUser().isAdmin()) {
+            this.issueRepositoryJPA.deleteById(issueId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        logger.warn(MessageFormat.format("User with ID {0} not allowed to delete issue with id {1}", securityContextHolderUtils.getCurrentUser().getId(), issueId));
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @Override
-    public Optional<IssueDTO> updateById(IssuePatchValidator issuePatchValidator, long issueId) {
-        Issue i = this.issueRepositoryJPA.getById(issueId);
+    public ResponseEntity<IssueDTO> updateById(IssuePatchValidator issuePatchValidator, long issueId) {
+        Optional<Issue> issue = this.issueRepositoryJPA.findById(issueId);
+        if (issue.isEmpty()) {
+            logger.warn(MessageFormat.format("There is no issue with id [{0}]", issueId));
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (issue.get().getOriginalPoster().getId() != securityContextHolderUtils.getCurrentUser().getId()) {
+            logger.warn(MessageFormat.format("User with id [{0}] not allowed to modify issue with id [{1}]", securityContextHolderUtils.getCurrentUser().getId(), issueId));
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         boolean projectIsUpdated = false;
 
-        if(issuePatchValidator.getTitle() != null && !issuePatchValidator.getTitle().isBlank() && !issuePatchValidator.getTitle().equals(i.getTitle())) {
-            i.setTitle(issuePatchValidator.getTitle());
+        if(issuePatchValidator.getTitle() != null && !issuePatchValidator.getTitle().isBlank() && !issuePatchValidator.getTitle().equals(issue.get().getTitle())) {
+            issue.get().setTitle(issuePatchValidator.getTitle());
             projectIsUpdated = true;
         }
 
-        if(issuePatchValidator.getIssueType() != null && !issuePatchValidator.getIssueType().isBlank() && !issuePatchValidator.getIssueType().equals(i.getIssueType())) {
-            i.setIssueType(issuePatchValidator.getIssueType());
+        if(issuePatchValidator.getIssueType() != null && !issuePatchValidator.getIssueType().isBlank() && !issuePatchValidator.getIssueType().equals(issue.get().getIssueType())) {
+            issue.get().setIssueType(issuePatchValidator.getIssueType());
             projectIsUpdated = true;
         }
 
         if (projectIsUpdated) {
-            return Optional.of(mapIssueToDTO(this.issueRepositoryJPA.save(i)));
+            return new ResponseEntity<>(mapIssueToDTO(this.issueRepositoryJPA.save(issue.get())), HttpStatus.OK);
         } else {
-            return Optional.empty();
+            logger.debug(MessageFormat.format("No change applied to issue with {0} ID", issueId));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 

@@ -4,9 +4,9 @@ import htrcak.backend.core.issues.data.IssueDTO;
 import htrcak.backend.core.issues.data.IssuePatchValidator;
 import htrcak.backend.core.issues.data.IssuePostValidator;
 import htrcak.backend.core.issues.data.IssueSearchCommand;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IssueService {
 
@@ -14,11 +14,11 @@ public interface IssueService {
 
     IssueDTO findById(long id);
 
-    Optional<IssueDTO> saveNewIssue(IssuePostValidator issuePostValidator);
+    ResponseEntity<IssueDTO> saveNewIssue(IssuePostValidator issuePostValidator);
 
-    void deleteById(long issueId);
+    ResponseEntity<?> deleteById(long issueId);
 
-    Optional<IssueDTO> updateById(IssuePatchValidator issuePatchValidator, long issueId);
+    ResponseEntity<IssueDTO> updateById(IssuePatchValidator issuePatchValidator, long issueId);
 
     List<IssueDTO> searchIssues(Long id, IssueSearchCommand isc);
 }
