@@ -2,6 +2,8 @@ package htrcak.backend.core.user.model;
 
 public class UserDTO {
 
+    // todo user controller (latest messages, inbox, replys etc.)
+
     private long id;
 
     private String username;
