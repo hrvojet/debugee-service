@@ -9,9 +9,9 @@ INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (99, 'Hrva', 'hrva
 INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (98, 'Luca', 'luca@lu.ca', false);
 INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (97, 'Lero', 'lero@le.pl', false);
 
-INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (1, 99, 'Title 1', 'Description of the first project', 0, 0);
-INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (2, 98, 'Title 2', 'Description of the second project', 0, 0);
-INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (3, 97, 'Title 3', 'Description of the third project', 0, 0);
+INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (1, 99, 'Debugee-web', 'Description of the first project', 0, 0);
+INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (2, 98, 'Debugee-backend-services', 'Backend service for debugee project written in java/spring', 0, 0);
+INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (3, 97, 'python-pandas', 'Pandas framework for data manipulation or whatnot', 0, 0);
 INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (4, 3, 'Devs project', 'DEV dev', 0, 0);
 
 INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (1, 5, 'Problem with persistence', 0, 'Bug', 1);

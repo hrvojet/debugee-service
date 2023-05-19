@@ -16,13 +16,19 @@ public class IssueController {
 
     private final IssueService issueService;
 
+    // TODO možda pass param i dohvati samo issue vezane za projekt?
+
     public IssueController(IssueService issueService) {
         this.issueService = issueService;
     }
 
     @GetMapping
-    public List<IssueDTO> findAllIssues() {
-        return issueService.findAll();
+    public List<IssueDTO> findAllIssues(@RequestParam(required = false) final Long projectId) {
+        if (projectId == null) {
+           return issueService.findAll();
+        } else {
+            return issueService.getAllIssuesForProject(projectId);
+        }
     }
 
     @GetMapping("/{id}")

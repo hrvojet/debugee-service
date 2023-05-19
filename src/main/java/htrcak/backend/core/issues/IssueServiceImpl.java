@@ -44,6 +44,11 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
+    public List<IssueDTO> getAllIssuesForProject(long id) {
+        return convertToDTOList(issueRepositoryJPA.findAll(where(getById(id))));
+    }
+
+    @Override
     public List<IssueDTO> findAll() {
         return convertToDTOList(issueRepositoryJPA.findAll());
     }

@@ -21,4 +21,6 @@ public interface IssueService {
     ResponseEntity<IssueDTO> updateById(IssuePatchValidator issuePatchValidator, long issueId);
 
     List<IssueDTO> searchIssues(Long id, IssueSearchCommand isc);
+
+    List<IssueDTO> getAllIssuesForProject(long id);
 }
