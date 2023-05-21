@@ -4,6 +4,7 @@ import htrcak.backend.core.comments.data.CommentDTO;
 import htrcak.backend.core.comments.data.CommentPatchValidator;
 import htrcak.backend.core.comments.data.CommentPostValidator;
 import htrcak.backend.core.comments.data.CommentRepositoryJPA;
+import htrcak.backend.core.issues.data.IssueDTO;
 import htrcak.backend.core.issues.data.IssueRepositoryJPA;
 import htrcak.backend.core.user.model.User;
 import htrcak.backend.core.user.model.UserDTO;
@@ -18,6 +19,9 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static htrcak.backend.utils.jpa.CommentSpecification.getAllWithIssueID;
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -96,6 +100,11 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    @Override
+    public List<CommentDTO> getAllCommentsByIssueId(long id) {
+        return convertToDTOList(commentRepositoryJPA.findAll(where(getAllWithIssueID(id))));
+    }
+
 
     private CommentDTO mapCommentToDTO(Comment comment) {
         return new CommentDTO(
@@ -113,5 +122,9 @@ public class CommentServiceImpl implements CommentService {
                 user.getName(),
                 user.getEmail()
         );
+    }
+
+    private List<CommentDTO> convertToDTOList(List<Comment> commentList) {
+        return commentList.stream().map(this::mapCommentToDTO).collect(Collectors.toList());
     }
 }

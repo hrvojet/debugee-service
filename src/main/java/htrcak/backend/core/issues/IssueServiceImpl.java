@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static htrcak.backend.utils.jpa.IssueSpecification.*;
+import static htrcak.backend.utils.jpa.IssueSpecification.getById;
+import static htrcak.backend.utils.jpa.IssueSpecification.findComment;
 import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service

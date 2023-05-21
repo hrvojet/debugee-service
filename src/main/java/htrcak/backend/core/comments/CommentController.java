@@ -24,8 +24,12 @@ public class CommentController {
     }
 
     @GetMapping
-    public List<CommentDTO> getAllComments() {
-        return commentService.findAll();
+    public List<CommentDTO> getAllComments(@RequestParam(required = false) final Long issueId) {
+        if (issueId == null) {
+            return commentService.findAll();
+        } else {
+            return commentService.getAllCommentsByIssueId(issueId);
+        }
     }
 
     @GetMapping("/{id}")

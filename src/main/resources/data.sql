@@ -43,3 +43,6 @@ UPDATE issue SET comment_number = comment_number + 1 WHERE id = 1;
 
 INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (5, 5, 'Be cool and deleted', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1);
 UPDATE issue SET comment_number = comment_number + 1 WHERE id = 1;
+
+INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (6, 5, '2 issue', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 2);
+UPDATE issue SET comment_number = comment_number + 1 WHERE id = 2;

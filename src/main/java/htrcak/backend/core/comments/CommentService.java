@@ -19,4 +19,6 @@ public interface CommentService {
     ResponseEntity<?> deleteById(long commentId);
 
     ResponseEntity<CommentDTO> updateById(long commentId, CommentPatchValidator commentPatchValidator);
+
+    List<CommentDTO> getAllCommentsByIssueId(long id);
 }
