@@ -41,8 +41,14 @@ UPDATE issue SET comment_number = comment_number + 1 WHERE id = 1;
 INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (4, 5, 'Next two!!', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1);
 UPDATE issue SET comment_number = comment_number + 1 WHERE id = 1;
 
-INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (5, 5, 'Be cool and deleted', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1);
+INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (5, 5, 'Be cool and deleted, very long text lorem ipsum anor mle jfd ksdf test my text. Be cool and deleted, very long text lorem ipsum anor mle jfd ksdf test my text. Be cool and deleted, very long text lorem ipsum anor mle jfd ksdf test my text. Be cool and deleted, very long text lorem ipsum anor mle jfd ksdf test my text. Be cool and deleted, very long text lorem ipsum anor mle jfd ksdf test my text. Be cool and deleted, very long text lorem ipsum anor mle jfd ksdf test my text. Be cool and deleted, very long text lorem ipsum anor mle jfd ksdf test my text. Be cool and deleted, very long text lorem ipsum anor mle jfd ksdf test my text. Be cool and deleted, very long text lorem ipsum anor mle jfd ksdf test my text. Be cool and deleted, very long text lorem ipsum anor mle jfd ksdf test my text. Be cool and deleted, very long text lorem ipsum anor mle', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1);
 UPDATE issue SET comment_number = comment_number + 1 WHERE id = 1;
 
-INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (6, 5, '2 issue', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 2);
+INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (6, 3, 'This is not working!!!', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1);
+UPDATE issue SET comment_number = comment_number + 1 WHERE id = 1;
+
+INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (7, 7, 'Yes it is working!', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1);
+UPDATE issue SET comment_number = comment_number + 1 WHERE id = 1;
+
+INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (8, 5, '2 issue', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 2);
 UPDATE issue SET comment_number = comment_number + 1 WHERE id = 2;
