@@ -10,16 +10,16 @@ public class UserDTO {
 
     private String email;
 
-    private String avatarUrl;
+    private String avatar_url;
 
-    private String webUrl;
+    private String web_url;
 
     public UserDTO(long id, String username, String email, String avatarUrl, String webUrl) {
         this.id = id;
         this.username = username;
         this.email = email;
-        this.avatarUrl = avatarUrl;
-        this.webUrl = webUrl;
+        this.avatar_url = avatarUrl;
+        this.web_url = webUrl;
     }
 
     public long getId() {
@@ -34,11 +34,11 @@ public class UserDTO {
         return email;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getAvatar_url() {
+        return avatar_url;
     }
 
-    public String getWebUrl() {
-        return webUrl;
+    public String getWeb_url() {
+        return web_url;
     }
 }
