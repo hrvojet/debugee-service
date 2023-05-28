@@ -23,7 +23,13 @@ public class IssueDTO {
         this.commentNumber = commentNumber;
         this.issueType = issueType;
         this.projectId = projectId;
-        this.originalPoster = new UserDTO(originalPoster.getId(), originalPoster.getName(), originalPoster.getEmail());
+        this.originalPoster = new UserDTO(
+                originalPoster.getId(),
+                originalPoster.getName(),
+                originalPoster.getEmail(),
+                originalPoster.getAvatarUrl(),
+                originalPoster.getWebUrl()
+        );
     }
 
     public long getId() {

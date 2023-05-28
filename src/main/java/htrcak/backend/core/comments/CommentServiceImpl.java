@@ -120,7 +120,9 @@ public class CommentServiceImpl implements CommentService {
         return new UserDTO(
                 user.getId(),
                 user.getName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getAvatarUrl(),
+                user.getWebUrl()
         );
     }
 

@@ -2,12 +2,12 @@ DELETE FROM issue;
 DELETE FROM project;
 DELETE FROM comment;
 
-INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (7, 'debugee', 'de@bug.e', true);
-INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (5, 'Reporter', 'reporter@asd.asd', false);
-INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (3, 'developer', 'developer@example.com', false);
-INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (99, 'Hrva', 'hrva@va.hr', false);
-INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (98, 'Luca', 'luca@lu.ca', false);
-INSERT INTO gitlab_user(id, username, email, is_admin) VALUES (97, 'Lero', 'lero@le.pl', false);
+INSERT INTO gitlab_user(id, username, email, is_admin, web_url, avatar_url) VALUES (7, 'debugee', 'de@bug.e', true, 'http://192.168.99.101/debugee', 'https://www.gravatar.com/avatar/ebbc39f503f663fb0d4d901d778442c8?s=80&d=identicon');
+INSERT INTO gitlab_user(id, username, email, is_admin, web_url, avatar_url) VALUES (5, 'Reporter', 'reporter@asd.asd', false, 'http://192.168.99.101/reporter', 'https://www.gravatar.com/avatar/6ed78b513cc97bfad8ca0e97a8347605?s=80&d=identicon');
+INSERT INTO gitlab_user(id, username, email, is_admin, web_url, avatar_url) VALUES (3, 'developer', 'developer@example.com', false, 'http://192.168.99.101/developer', 'http://192.168.99.101/uploads/-/system/user/avatar/3/avatar.png');
+INSERT INTO gitlab_user(id, username, email, is_admin, web_url, avatar_url) VALUES (99, 'Hrva', 'hrva@va.hr', false, 'https://example.com/', 'https://material.angular.io/assets/img/examples/shiba1.jpg');
+INSERT INTO gitlab_user(id, username, email, is_admin, web_url, avatar_url) VALUES (98, 'Luca', 'luca@lu.ca', false, 'https://example.com/', 'https://material.angular.io/assets/img/examples/shiba1.jpg');
+INSERT INTO gitlab_user(id, username, email, is_admin, web_url, avatar_url) VALUES (97, 'Lero', 'lero@le.pl', false, 'https://example.com/', 'https://material.angular.io/assets/img/examples/shiba1.jpg');
 
 INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (1, 99, 'Debugee-web', 'Description of the first project', 0, 0);
 INSERT INTO project(id, owner, title, description, closed_issues, opened_issues) VALUES (2, 98, 'Debugee-backend-services', 'Backend service for debugee project written in java/spring', 0, 0);

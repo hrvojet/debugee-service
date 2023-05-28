@@ -65,13 +65,18 @@ public class JwtServiceImpl implements JwtService{
                 response.getBody().get("username").toString(),
                 response.getBody().get("email").toString(),
                 Long.parseLong(response.getBody().get("id").toString()),
-                isAdmin.compareTo("") != 0));
+                isAdmin.compareTo("") != 0,
+                response.getBody().get("web_url").toString(),
+                response.getBody().get("avatar_url").toString()
+                )
+        );
 
         return Jwts.builder()
                 .setSubject(response.getBody().get("id").toString())
                 .claim("username", response.getBody().get("username").toString())
                 .claim("email", response.getBody().get("email"))
                 .claim("authorities", isAdmin.compareTo("") == 0 ? Collections.emptyList() : isAdmin)
+                .claim("avatar_url", response.getBody().get("avatar_url").toString())
                 .setExpiration(new Date(System.currentTimeMillis() + 700000000))
                 .signWith(SignatureAlgorithm.HS512, signingKey)
                 .compact();

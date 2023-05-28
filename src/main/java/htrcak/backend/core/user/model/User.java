@@ -36,6 +36,12 @@ public class User implements Serializable {
     @NotNull
     private boolean isAdmin;
 
+    @Column
+    private String avatarUrl;
+
+    @Column
+    private String webUrl;
+
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private Set<Comment> comments = new HashSet<>();
 
@@ -45,11 +51,13 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "originalPoster", fetch = FetchType.LAZY)
     private Set<Issue> issues = new HashSet<>();
 
-    public User(String username, String email, long id, boolean isAdmin) {
+    public User(String username, String email, long id, boolean isAdmin, String webUrl, String avatarUrl) {
+        this.id = id;
         this.username = username;
         this.email = email;
-        this.id = id;
         this.isAdmin = isAdmin;
+        this.webUrl = webUrl;
+        this.avatarUrl = avatarUrl;
     }
 
     public User() {
@@ -110,5 +118,21 @@ public class User implements Serializable {
 
     public void setIssues(Set<Issue> issues) {
         this.issues = issues;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getWebUrl() {
+        return webUrl;
+    }
+
+    public void setWebUrl(String webUrl) {
+        this.webUrl = webUrl;
     }
 }

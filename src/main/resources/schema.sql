@@ -2,7 +2,9 @@ CREATE TABLE IF NOT EXISTS gitlab_user(
     id INT PRIMARY KEY,
     username VARCHAR(256) NOT NULL,
     email VARCHAR(256) NOT NULL,
-    is_admin BOOLEAN NOT NULL
+    is_admin BOOLEAN NOT NULL,
+    web_url VARCHAR(256),
+    avatar_url VARCHAR(256)
 );
 
 CREATE TABLE IF NOT EXISTS project (
