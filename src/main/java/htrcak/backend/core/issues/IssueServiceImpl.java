@@ -41,26 +41,21 @@ public class IssueServiceImpl implements IssueService {
 
 
     @Override
-    public Page<IssueDTO> searchIssues(Long id, IssueSearchCommand isc) {
-        // TODO pass arguments on page, size, sort direction for app page-returning methods
-        Pageable page = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "id"));
+    public Page<IssueDTO> searchIssues(Long id, Pageable pageable, IssueSearchCommand isc) {
         return issueRepositoryJPA.findAll(
                 where(getById(id).and(findComment(isc))),
-                page
+                pageable
         ).map(IssueDTO::new);
     }
 
     @Override
-    public Page<IssueDTO> getAllIssuesForProject(long id) {
-        Pageable page = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "id"));
-        Page<Issue> pg = issueRepositoryJPA.findAll(where(getById(id)), page);
-        return pg.map(IssueDTO::new);
+    public Page<IssueDTO> getAllIssuesForProject(long id, Pageable pageable) {
+        return issueRepositoryJPA.findAll(where(getById(id)), pageable).map(IssueDTO::new);
     }
 
     @Override
-    public Page<IssueDTO> findAll() {
-        Pageable page = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "id"));
-        return issueRepositoryJPA.findAll(page).map(IssueDTO::new);
+    public Page<IssueDTO> findAll(Pageable pageable) {
+        return issueRepositoryJPA.findAll(pageable).map(IssueDTO::new);
     }
 
     @Override
