@@ -38,7 +38,7 @@ public class IssueController {
     }
 
     @PostMapping("/search/{projectId}")
-    public Page<IssueDTO> searchIssuesByProject(@PathVariable final long projectId, @Valid @RequestBody(required = false) IssueSearchCommand isc) {
+    public Page<IssueDTO> searchIssuesByProject(@PathVariable final long projectId, @Valid @RequestBody IssueSearchCommand isc) {
         return issueService.searchIssues(projectId, isc);
     }
 
