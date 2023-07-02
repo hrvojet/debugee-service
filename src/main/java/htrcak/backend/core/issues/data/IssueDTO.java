@@ -1,5 +1,6 @@
 package htrcak.backend.core.issues.data;
 
+import htrcak.backend.core.issues.Issue;
 import htrcak.backend.core.user.model.User;
 import htrcak.backend.core.user.model.UserDTO;
 
@@ -18,6 +19,16 @@ public class IssueDTO {
     private UserDTO originalPoster;
 
     private boolean isOpened;
+
+    public IssueDTO(Issue issue) {
+        this.id = issue.getId();
+        this.title = issue.getTitle();
+        this.commentNumber = issue.getCommentNumber();
+        this.issueType = issue.getIssueType();
+        this.projectId = issue.getProject().getId();
+        this.originalPoster = new UserDTO(issue.getOriginalPoster());
+        this.isOpened = issue.isOpened();
+    }
 
     public IssueDTO(long id, long projectId, String title, int commentNumber, String issueType, User originalPoster, boolean isOpened) {
         this.id = id;

@@ -5,6 +5,10 @@ import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
 import htrcak.backend.utils.SecurityContextHolderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -37,21 +41,26 @@ public class IssueServiceImpl implements IssueService {
 
 
     @Override
-    public List<IssueDTO> searchIssues(Long id, IssueSearchCommand isc) {
-        return convertToDTOList(issueRepositoryJPA.findAll(
-                where(getById(id)
-                        .and(findComment(isc)))
-        ));
+    public Page<IssueDTO> searchIssues(Long id, IssueSearchCommand isc) {
+        // TODO pass arguments on page, size, sort direction for app page-returning methods
+        Pageable page = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "id"));
+        return issueRepositoryJPA.findAll(
+                where(getById(id).and(findComment(isc))),
+                page
+        ).map(IssueDTO::new);
     }
 
     @Override
-    public List<IssueDTO> getAllIssuesForProject(long id) {
-        return convertToDTOList(issueRepositoryJPA.findAll(where(getById(id))));
+    public Page<IssueDTO> getAllIssuesForProject(long id) {
+        Pageable page = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "id"));
+        Page<Issue> pg = issueRepositoryJPA.findAll(where(getById(id)), page);
+        return pg.map(IssueDTO::new);
     }
 
     @Override
-    public List<IssueDTO> findAll() {
-        return convertToDTOList(issueRepositoryJPA.findAll());
+    public Page<IssueDTO> findAll() {
+        Pageable page = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "id"));
+        return issueRepositoryJPA.findAll(page).map(IssueDTO::new);
     }
 
     @Override

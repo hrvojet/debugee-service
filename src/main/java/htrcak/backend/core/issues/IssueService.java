@@ -4,13 +4,14 @@ import htrcak.backend.core.issues.data.IssueDTO;
 import htrcak.backend.core.issues.data.IssuePatchValidator;
 import htrcak.backend.core.issues.data.IssuePostValidator;
 import htrcak.backend.core.issues.data.IssueSearchCommand;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface IssueService {
 
-    List<IssueDTO> findAll();
+    Page<IssueDTO> findAll();
 
     IssueDTO findById(long id);
 
@@ -20,7 +21,7 @@ public interface IssueService {
 
     ResponseEntity<IssueDTO> updateById(IssuePatchValidator issuePatchValidator, long issueId);
 
-    List<IssueDTO> searchIssues(Long id, IssueSearchCommand isc);
+    Page<IssueDTO> searchIssues(Long id, IssueSearchCommand isc);
 
-    List<IssueDTO> getAllIssuesForProject(long id);
+    Page<IssueDTO> getAllIssuesForProject(long id);
 }

@@ -4,6 +4,7 @@ import htrcak.backend.core.issues.data.IssueDTO;
 import htrcak.backend.core.issues.data.IssuePatchValidator;
 import htrcak.backend.core.issues.data.IssuePostValidator;
 import htrcak.backend.core.issues.data.IssueSearchCommand;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class IssueController {
     }
 
     @GetMapping
-    public List<IssueDTO> findAllIssues(@RequestParam(required = false) final Long projectId) {
+    public Page<IssueDTO> findAllIssues(@RequestParam(required = false) final Long projectId) {
         if (projectId == null) {
            return issueService.findAll();
         } else {
@@ -37,7 +38,7 @@ public class IssueController {
     }
 
     @PostMapping("/search/{projectId}")
-    public List<IssueDTO> searchIssuesByProject(@PathVariable final long projectId, @Valid @RequestBody(required = false) IssueSearchCommand isc) {
+    public Page<IssueDTO> searchIssuesByProject(@PathVariable final long projectId, @Valid @RequestBody(required = false) IssueSearchCommand isc) {
         return issueService.searchIssues(projectId, isc);
     }
 

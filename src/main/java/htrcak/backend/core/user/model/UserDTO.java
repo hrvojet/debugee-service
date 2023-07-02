@@ -14,6 +14,14 @@ public class UserDTO {
 
     private String web_url;
 
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.username = user.getName();
+        this.email = user.getEmail();
+        this.avatar_url = user.getAvatarUrl();
+        this.web_url = user.getWebUrl();
+    }
+
     public UserDTO(long id, String username, String email, String avatarUrl, String webUrl) {
         this.id = id;
         this.username = username;
