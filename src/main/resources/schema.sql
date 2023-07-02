@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS issue (
     issue_type VARCHAR(32) NOT NULL,
     project_id INT NOT NULL,
     original_poster INT NOT NULL,
-    status VARCHAR(45),
+    is_opened BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (project_id) REFERENCES project(id),
     FOREIGN KEY (original_poster) REFERENCES gitlab_user(id)
 );

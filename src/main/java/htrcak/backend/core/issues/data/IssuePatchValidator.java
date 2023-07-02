@@ -6,6 +6,8 @@ public class IssuePatchValidator {
 
     private String issueType;
 
+    private boolean isOpened;
+
 
     public String getTitle() {
         return title;
@@ -13,5 +15,9 @@ public class IssuePatchValidator {
 
     public String getIssueType() {
         return issueType;
+    }
+
+    public boolean isOpened() {
+        return isOpened;
     }
 }

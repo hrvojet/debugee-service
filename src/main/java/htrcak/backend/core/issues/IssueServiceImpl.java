@@ -105,6 +105,11 @@ public class IssueServiceImpl implements IssueService {
             projectIsUpdated = true;
         }
 
+        if(issuePatchValidator.isOpened() != issue.get().isOpened()) {
+            issue.get().setOpened(issuePatchValidator.isOpened());
+            projectIsUpdated = true;
+        }
+
         if (projectIsUpdated) {
             return new ResponseEntity<>(mapIssueToDTO(this.issueRepositoryJPA.save(issue.get())), HttpStatus.OK);
         } else {
@@ -114,7 +119,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     private IssueDTO mapIssueToDTO(Issue issue) {
-        return new IssueDTO(issue.getId(), issue.getProject().getId(), issue.getTitle(), issue.getCommentNumber(), issue.getIssueType(), issue.getOriginalPoster());
+        return new IssueDTO(issue.getId(), issue.getProject().getId(), issue.getTitle(), issue.getCommentNumber(), issue.getIssueType(), issue.getOriginalPoster(), issue.isOpened());
     }
 
     private List<IssueDTO> convertToDTOList(List<Issue> issueList) {

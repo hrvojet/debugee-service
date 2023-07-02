@@ -17,7 +17,9 @@ public class IssueDTO {
 
     private UserDTO originalPoster;
 
-    public IssueDTO(long id, long projectId, String title, int commentNumber, String issueType, User originalPoster) {
+    private boolean isOpened;
+
+    public IssueDTO(long id, long projectId, String title, int commentNumber, String issueType, User originalPoster, boolean isOpened) {
         this.id = id;
         this.title = title;
         this.commentNumber = commentNumber;
@@ -30,6 +32,7 @@ public class IssueDTO {
                 originalPoster.getAvatarUrl(),
                 originalPoster.getWebUrl()
         );
+        this.isOpened = isOpened;
     }
 
     public long getId() {
@@ -54,5 +57,9 @@ public class IssueDTO {
 
     public UserDTO getOriginalPoster() {
         return originalPoster;
+    }
+
+    public boolean isOpened() {
+        return isOpened;
     }
 }

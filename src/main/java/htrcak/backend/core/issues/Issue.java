@@ -23,7 +23,7 @@ public class Issue {
     private int commentNumber;
 
     @Column
-    private String issueType; //TODO enum
+    private String issueType; //TODO list
 
     @ManyToOne
     @JoinColumn(name="project_id", referencedColumnName = "id")
@@ -37,6 +37,9 @@ public class Issue {
     @NotNull
     private User originalPoster;
 
+    @Column
+    private boolean isOpened;
+
     public Issue() {
     }
 
@@ -45,6 +48,7 @@ public class Issue {
         this.title = title;
         this.issueType = Objects.requireNonNullElse(issueType, "");
         this.originalPoster = op;
+        this.isOpened = true;
     }
 
     public long getId() {
@@ -109,5 +113,13 @@ public class Issue {
 
     public void setOriginalPoster(User originalPoster) {
         this.originalPoster = originalPoster;
+    }
+
+    public boolean isOpened() {
+        return isOpened;
+    }
+
+    public void setOpened(boolean opened) {
+        isOpened = opened;
     }
 }

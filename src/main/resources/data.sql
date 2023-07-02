@@ -23,10 +23,10 @@ UPDATE project SET opened_issues = opened_issues + 1 where id = 1;
 INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (3, 5, 'We need better', 0, 'Feature', 1);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 1;
 
-INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (4, 5, 'How to uninstall dependency', 0, 'Feature', 1);
+INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (4, 3, 'How to uninstall dependency', 0, 'Feature', 1);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 1;
 
-INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (5, 5, 'We need better solution', 0, 'Feature', 2);
+INSERT INTO issue(id, original_poster, title, comment_number, issue_type, project_id) VALUES (5, 3, 'We need better solution', 0, 'Feature', 2);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 2;
 
 INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (1, 5, 'This is some long text that is here, bla bla...', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1);
