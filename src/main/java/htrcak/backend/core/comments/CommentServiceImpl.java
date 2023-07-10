@@ -4,6 +4,7 @@ import htrcak.backend.core.comments.data.CommentDTO;
 import htrcak.backend.core.comments.data.CommentPatchValidator;
 import htrcak.backend.core.comments.data.CommentPostValidator;
 import htrcak.backend.core.comments.data.CommentRepositoryJPA;
+import htrcak.backend.core.issues.Issue;
 import htrcak.backend.core.issues.data.IssueDTO;
 import htrcak.backend.core.issues.data.IssueRepositoryJPA;
 import htrcak.backend.core.user.model.User;
@@ -53,19 +54,39 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public ResponseEntity<CommentDTO> saveNewComment(CommentPostValidator commentPostValidator) {
-        return new ResponseEntity<>(
-            mapCommentToDTO(commentRepositoryJPA.save(
-                new Comment(
-                    securityContextHolderUtils.getCurrentUser(),
-                    commentPostValidator.getText(),
-                    issueRepositoryJPA.getById(commentPostValidator.getIssueId())))),
-            HttpStatus.CREATED);
+
+        Optional<Issue> issue = this.issueRepositoryJPA.findById(commentPostValidator.getIssueId());
+        if (issue.isEmpty()) {
+            logger.warn(MessageFormat.format("There is no issue with id [{0}]", commentPostValidator.getIssueId()));
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        issue.get().setCommentNumber(issue.get().getCommentNumber() + 1);
+        this.issueRepositoryJPA.save(issue.get());
+
+        CommentDTO commentDTO = mapCommentToDTO(commentRepositoryJPA.save(new Comment(securityContextHolderUtils.getCurrentUser(), commentPostValidator.getText(), issue.get())));
+
+        return new ResponseEntity<>(commentDTO, HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<?> deleteById(long commentId) {
-        long commentForDeletion = this.commentRepositoryJPA.getById(commentId).getUser().getId();
+        Comment comment = this.commentRepositoryJPA.getById(commentId);
+        long commentForDeletion = comment.getUser().getId();
+
         if (commentForDeletion == securityContextHolderUtils.getCurrentUser().getId() || securityContextHolderUtils.getCurrentUser().isAdmin()) {
+
+            Optional<Issue> issue = this.issueRepositoryJPA.findById(comment.getIssue().getId());
+            if (issue.isEmpty()) {
+                logger.warn(MessageFormat.format("There is no issue with id [{0}]", comment.getIssue().getId()));
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            if (issue.get().getCommentNumber() > 0) {
+                issue.get().setCommentNumber(issue.get().getCommentNumber() - 1);
+                this.issueRepositoryJPA.save(issue.get());
+            }
+
             this.commentRepositoryJPA.deleteById(commentId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

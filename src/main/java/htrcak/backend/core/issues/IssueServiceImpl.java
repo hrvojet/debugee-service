@@ -123,7 +123,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     private IssueDTO mapIssueToDTO(Issue issue) {
-        return new IssueDTO(issue.getId(), issue.getProject().getId(), issue.getTitle(), issue.getCommentNumber(), issue.getIssueType(), issue.getOriginalPoster(), issue.isOpened());
+        return new IssueDTO(issue);
     }
 
     private List<IssueDTO> convertToDTOList(List<Issue> issueList) {
