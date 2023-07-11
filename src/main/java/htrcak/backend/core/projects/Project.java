@@ -2,9 +2,12 @@ package htrcak.backend.core.projects;
 
 import htrcak.backend.core.issues.Issue;
 import htrcak.backend.core.user.model.User;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -21,6 +24,14 @@ public class Project {
 
     @Column
     private String description;
+
+    @Column(updatable = false)
+    @CreationTimestamp
+    private LocalDateTime created;
+
+    @Column
+    @UpdateTimestamp
+    private LocalDateTime edited;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Issue> issues;
@@ -100,5 +111,21 @@ public class Project {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public LocalDateTime getEdited() {
+        return edited;
+    }
+
+    public void setEdited(LocalDateTime edited) {
+        this.edited = edited;
     }
 }

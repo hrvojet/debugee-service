@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS project (
     owner INT NOT NULL,
     title VARCHAR(256) NOT NULL,
     description VARCHAR(512) NOT NULL,
+    created TIMESTAMP NOT NULL,
+    edited TIMESTAMP,
     closed_issues INT NOT NULL,
     opened_issues INT NOT NULL,
     FOREIGN KEY (owner) REFERENCES gitlab_user(id)
