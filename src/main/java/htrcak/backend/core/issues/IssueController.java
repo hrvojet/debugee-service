@@ -30,11 +30,12 @@ public class IssueController {
             @RequestParam(required = false) final Long projectId,
             @RequestParam(required = false, defaultValue = "0") final int page,
             @RequestParam(required = false, defaultValue = "5") final int size,
-            @RequestParam(required = false, defaultValue = "ASC") final String sortBy) {
+            @RequestParam(required = false, defaultValue = "ASC") final String sortBy,
+            @RequestParam(required = false, defaultValue = "id") final String id) { //TODO default sort change
         if (projectId == null) {
-           return issueService.findAll(createPageRequest(page, size, sortBy));
+           return issueService.findAll(createPageRequest(page, size, sortBy, id));
         } else {
-            return issueService.getAllIssuesForProject(projectId, createPageRequest(page, size, sortBy));
+            return issueService.getAllIssuesForProject(projectId, createPageRequest(page, size, sortBy, id));
         }
     }
 
@@ -50,8 +51,9 @@ public class IssueController {
             @RequestParam(required = false, defaultValue = "0") final int page,
             @RequestParam(required = false, defaultValue = "5") final int size,
             @RequestParam(required = false, defaultValue = "ASC") final String sortBy,
+            @RequestParam(required = false, defaultValue = "id") final String id,
             @Valid @RequestBody IssueSearchCommand isc) {
-        return issueService.searchIssues(projectId, createPageRequest(page, size, sortBy), isc);
+        return issueService.searchIssues(projectId, createPageRequest(page, size, sortBy, id), isc);
     }
 
     @PostMapping
@@ -69,7 +71,7 @@ public class IssueController {
         return issueService.updateById(issuePatchValidator, issueId);
     }
 
-    private Pageable createPageRequest(int page, int size, String sortBy) {
-        return PageRequest.of(page, size, Sort.by("ASC".equalsIgnoreCase(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC, "id"));
+    private Pageable createPageRequest(int page, int size, String sortBy, String id) {
+        return PageRequest.of(page, size, Sort.by("ASC".equalsIgnoreCase(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC, id));
     }
 }
