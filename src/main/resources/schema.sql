@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS project (
 CREATE TABLE IF NOT EXISTS issue (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title VARCHAR(256) NOT NULL,
+    created TIMESTAMP NOT NULL,
+    edited TIMESTAMP,
     comment_number INT NOT NULL,
     issue_type VARCHAR(32) NOT NULL,
     project_id INT NOT NULL,

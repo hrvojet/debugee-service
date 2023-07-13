@@ -4,6 +4,8 @@ import htrcak.backend.core.issues.Issue;
 import htrcak.backend.core.user.model.User;
 import htrcak.backend.core.user.model.UserDTO;
 
+import java.time.LocalDateTime;
+
 public class IssueDTO {
 
     private long id;
@@ -11,6 +13,10 @@ public class IssueDTO {
     private long projectId;
 
     private String title;
+
+    private LocalDateTime created;
+
+    private LocalDateTime edited;
 
     private int commentNumber;
 
@@ -28,22 +34,8 @@ public class IssueDTO {
         this.projectId = issue.getProject().getId();
         this.originalPoster = new UserDTO(issue.getOriginalPoster());
         this.isOpened = issue.isOpened();
-    }
-
-    public IssueDTO(long id, long projectId, String title, int commentNumber, String issueType, User originalPoster, boolean isOpened) {
-        this.id = id;
-        this.title = title;
-        this.commentNumber = commentNumber;
-        this.issueType = issueType;
-        this.projectId = projectId;
-        this.originalPoster = new UserDTO(
-                originalPoster.getId(),
-                originalPoster.getName(),
-                originalPoster.getEmail(),
-                originalPoster.getAvatarUrl(),
-                originalPoster.getWebUrl()
-        );
-        this.isOpened = isOpened;
+        this.created = issue.getCreated();
+        this.edited = issue.getEdited();
     }
 
     public long getId() {
@@ -72,5 +64,13 @@ public class IssueDTO {
 
     public boolean isOpened() {
         return isOpened;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public LocalDateTime getEdited() {
+        return edited;
     }
 }
