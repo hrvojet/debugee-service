@@ -4,6 +4,8 @@ import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +24,12 @@ public class ProjectController {
     }
 
     @GetMapping
-    public Page<ProjectDTO> findAllProjects() {
-        return projectService.findAll();
+    public Page<ProjectDTO> findAllProjects(
+            @RequestParam(required = false, defaultValue = "0") final int page,
+            @RequestParam(required = false, defaultValue = "5") final int size,
+            @RequestParam(required = false, defaultValue = "ASC") final String sortBy,
+            @RequestParam(required = false, defaultValue = "id") final String id) {
+        return projectService.findAll(PageRequest.of(page, size, Sort.by("ASC".equalsIgnoreCase(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC, id)));
     }
 
     @GetMapping("/{id}")

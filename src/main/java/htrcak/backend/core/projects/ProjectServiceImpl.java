@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,8 @@ public class ProjectServiceImpl implements ProjectService{
 
 
     @Override
-    public Page<ProjectDTO> findAll() {
-        return projectRepositoryJPA.findAll(PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "created"))).map(this::mapProjectToDTO);
+    public Page<ProjectDTO> findAll(Pageable pageable) {
+        return projectRepositoryJPA.findAll(pageable).map(this::mapProjectToDTO);
     }
 
     @Override
