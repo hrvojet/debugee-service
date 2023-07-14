@@ -7,14 +7,15 @@ import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
 import htrcak.backend.utils.SecurityContextHolderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService{
@@ -31,8 +32,8 @@ public class ProjectServiceImpl implements ProjectService{
 
 
     @Override
-    public List<ProjectDTO> findAll() {
-        return projectRepositoryJPA.findAll().stream().map(this::mapProjectToDTO).collect(Collectors.toList());
+    public Page<ProjectDTO> findAll() {
+        return projectRepositoryJPA.findAll(PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "created"))).map(this::mapProjectToDTO);
     }
 
     @Override

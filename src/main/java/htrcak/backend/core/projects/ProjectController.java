@@ -3,6 +3,7 @@ package htrcak.backend.core.projects;
 import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ProjectController {
     }
 
     @GetMapping
-    public List<ProjectDTO> findAllProjects() {
+    public Page<ProjectDTO> findAllProjects() {
         return projectService.findAll();
     }
 

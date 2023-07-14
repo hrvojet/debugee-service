@@ -3,6 +3,7 @@ package htrcak.backend.core.projects;
 import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public interface ProjectService {
 
-    List<ProjectDTO> findAll();
+    Page<ProjectDTO> findAll();
 
     ProjectDTO findById(long id);
 
