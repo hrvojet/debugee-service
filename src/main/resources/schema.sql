@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS issue (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title VARCHAR(256) NOT NULL,
     created TIMESTAMP NOT NULL,
-    edited TIMESTAMP,
+    edited TIMESTAMP NOT NULL,
     comment_number INT NOT NULL,
     issue_type VARCHAR(32) NOT NULL,
     project_id INT NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS comment (
     issue_id INT NOT NULL,
     text VARCHAR(4096) NOT NULL,
     created TIMESTAMP NOT NULL,
-    edited TIMESTAMP,
+    edited TIMESTAMP NOT NULL,
     FOREIGN KEY (issue_id) REFERENCES issue(id),
     FOREIGN KEY (author) REFERENCES gitlab_user(id)
 );
