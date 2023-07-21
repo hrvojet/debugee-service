@@ -56,9 +56,9 @@ public class IssueController {
         return issueService.searchIssues(projectId, createPageRequest(page, size, sortBy, id), isc);
     }
 
-    @PostMapping
-    public ResponseEntity<IssueDTO> saveIssueByProjectID(@Valid @RequestBody final IssuePostValidator issuePostValidator) {
-        return issueService.saveNewIssue(issuePostValidator);
+    @PostMapping("/{projectID}")
+    public ResponseEntity<IssueDTO> saveIssueByProjectID(@PathVariable Long projectID, @Valid @RequestBody final IssuePostValidator issuePostValidator) {
+        return issueService.saveNewIssue(projectID, issuePostValidator);
     }
 
     @DeleteMapping("/{issueId}")

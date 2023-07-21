@@ -16,7 +16,7 @@ public interface IssueService {
 
     IssueDTO findById(long id);
 
-    ResponseEntity<IssueDTO> saveNewIssue(IssuePostValidator issuePostValidator);
+    ResponseEntity<IssueDTO> saveNewIssue(Long projectID, IssuePostValidator issuePostValidator);
 
     ResponseEntity<?> deleteById(long issueId);
 

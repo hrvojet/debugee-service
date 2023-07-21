@@ -11,6 +11,10 @@ public class CommentPostValidator {
     @NotBlank(message = "Text must not be empty")
     private String text;
 
+    public CommentPostValidator(long issueId, String text) {
+        this.issueId = issueId;
+        this.text = text;
+    }
 
     public long getIssueId() {
         return issueId;

@@ -1,6 +1,7 @@
 package htrcak.backend.core.issues;
 
-import htrcak.backend.core.comments.Comment;
+import htrcak.backend.core.comments.CommentService;
+import htrcak.backend.core.comments.data.CommentPostValidator;
 import htrcak.backend.core.issues.data.*;
 import htrcak.backend.core.projects.Project;
 import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
@@ -8,9 +9,7 @@ import htrcak.backend.utils.SecurityContextHolderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,10 +34,13 @@ public class IssueServiceImpl implements IssueService {
 
     private final ProjectRepositoryJPA projectRepositoryJPA;
 
-    public IssueServiceImpl(IssueRepositoryJPA issueRepositoryJPA, SecurityContextHolderUtils securityContextHolderUtils, ProjectRepositoryJPA projectRepositoryJPA) {
+    private final CommentService commentService;
+
+    public IssueServiceImpl(IssueRepositoryJPA issueRepositoryJPA, SecurityContextHolderUtils securityContextHolderUtils, ProjectRepositoryJPA projectRepositoryJPA, CommentService commentService) {
         this.issueRepositoryJPA = issueRepositoryJPA;
         this.securityContextHolderUtils = securityContextHolderUtils;
         this.projectRepositoryJPA = projectRepositoryJPA;
+        this.commentService = commentService;
     }
 
 
@@ -66,15 +68,17 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public ResponseEntity<IssueDTO> saveNewIssue(IssuePostValidator issuePostValidator) {
+    public ResponseEntity<IssueDTO> saveNewIssue(Long projectID, IssuePostValidator issuePostValidator) {
 
         Issue newIssue = issueRepositoryJPA.save(new Issue(
-                projectRepositoryJPA.getById(issuePostValidator.getProjectId()),
+                projectRepositoryJPA.getById(projectID),
                 issuePostValidator.getTitle(),
                 issuePostValidator.getIssueType(),
                 securityContextHolderUtils.getCurrentUser()
         ));
+        //TODO use save comment from commentService
         propagateEditToProject(newIssue);
+        this.commentService.saveNewComment(new CommentPostValidator(newIssue.getId(), issuePostValidator.getFirstComment()));
 
         return new ResponseEntity<>(mapIssueToDTO(newIssue), HttpStatus.CREATED);
     }
