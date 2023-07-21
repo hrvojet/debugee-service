@@ -1,6 +1,8 @@
 package htrcak.backend.core.issues;
 
+import htrcak.backend.core.comments.Comment;
 import htrcak.backend.core.issues.data.*;
+import htrcak.backend.core.projects.Project;
 import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
 import htrcak.backend.utils.SecurityContextHolderUtils;
 import org.slf4j.Logger;
@@ -65,12 +67,16 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public ResponseEntity<IssueDTO> saveNewIssue(IssuePostValidator issuePostValidator) {
-        return new ResponseEntity<>(mapIssueToDTO(issueRepositoryJPA.save(new Issue(
+
+        Issue newIssue = issueRepositoryJPA.save(new Issue(
                 projectRepositoryJPA.getById(issuePostValidator.getProjectId()),
                 issuePostValidator.getTitle(),
                 issuePostValidator.getIssueType(),
                 securityContextHolderUtils.getCurrentUser()
-                ))), HttpStatus.CREATED);
+        ));
+        propagateEditToProject(newIssue);
+
+        return new ResponseEntity<>(mapIssueToDTO(newIssue), HttpStatus.CREATED);
     }
 
     @Override
@@ -115,7 +121,9 @@ public class IssueServiceImpl implements IssueService {
         }
 
         if (projectIsUpdated) {
-            return new ResponseEntity<>(mapIssueToDTO(this.issueRepositoryJPA.save(issue.get())), HttpStatus.OK);
+            Issue updatedIssue = this.issueRepositoryJPA.save(issue.get());
+            propagateEditToProject(updatedIssue);
+            return new ResponseEntity<>(mapIssueToDTO(updatedIssue), HttpStatus.OK);
         } else {
             logger.debug(MessageFormat.format("No change applied to issue with {0} ID", issueId));
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -128,5 +136,11 @@ public class IssueServiceImpl implements IssueService {
 
     private List<IssueDTO> convertToDTOList(List<Issue> issueList) {
         return issueList.stream().map(this::mapIssueToDTO).collect(Collectors.toList());
+    }
+
+    private void propagateEditToProject(Issue issue) {
+        Project project = projectRepositoryJPA.getById(issue.getProject().getId());
+        project.setEdited(issue.getEdited());
+        projectRepositoryJPA.save(project);
     }
 }

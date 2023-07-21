@@ -5,8 +5,9 @@ import htrcak.backend.core.comments.data.CommentPatchValidator;
 import htrcak.backend.core.comments.data.CommentPostValidator;
 import htrcak.backend.core.comments.data.CommentRepositoryJPA;
 import htrcak.backend.core.issues.Issue;
-import htrcak.backend.core.issues.data.IssueDTO;
 import htrcak.backend.core.issues.data.IssueRepositoryJPA;
+import htrcak.backend.core.projects.Project;
+import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
 import htrcak.backend.core.user.model.User;
 import htrcak.backend.core.user.model.UserDTO;
 import htrcak.backend.utils.SecurityContextHolderUtils;
@@ -31,15 +32,17 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepositoryJPA commentRepositoryJPA;
 
-    private final SecurityContextHolderUtils securityContextHolderUtils;
-
-
     private final IssueRepositoryJPA issueRepositoryJPA;
 
-    public CommentServiceImpl(CommentRepositoryJPA commentRepositoryJPA, SecurityContextHolderUtils securityContextHolderUtils, IssueRepositoryJPA issueRepositoryJPA) {
+    private final ProjectRepositoryJPA projectRepositoryJPA;
+
+    private final SecurityContextHolderUtils securityContextHolderUtils;
+
+    public CommentServiceImpl(CommentRepositoryJPA commentRepositoryJPA, SecurityContextHolderUtils securityContextHolderUtils, IssueRepositoryJPA issueRepositoryJPA, ProjectRepositoryJPA projectRepositoryJPA) {
         this.commentRepositoryJPA = commentRepositoryJPA;
         this.securityContextHolderUtils = securityContextHolderUtils;
         this.issueRepositoryJPA = issueRepositoryJPA;
+        this.projectRepositoryJPA = projectRepositoryJPA;
     }
 
     @Override
@@ -64,9 +67,10 @@ public class CommentServiceImpl implements CommentService {
         issue.get().setCommentNumber(issue.get().getCommentNumber() + 1);
         this.issueRepositoryJPA.save(issue.get());
 
-        CommentDTO commentDTO = mapCommentToDTO(commentRepositoryJPA.save(new Comment(securityContextHolderUtils.getCurrentUser(), commentPostValidator.getText(), issue.get())));
+        Comment newComment = commentRepositoryJPA.save(new Comment(securityContextHolderUtils.getCurrentUser(), commentPostValidator.getText(), issue.get()));
+        propagateEditToProject(newComment);
 
-        return new ResponseEntity<>(commentDTO, HttpStatus.CREATED);
+        return new ResponseEntity<>(mapCommentToDTO(newComment), HttpStatus.CREATED);
     }
 
     @Override
@@ -114,7 +118,10 @@ public class CommentServiceImpl implements CommentService {
         }
 
         if(commentIsUpdated) {
-            return new ResponseEntity<>(mapCommentToDTO(commentRepositoryJPA.save(comment.get())), HttpStatus.OK);
+            Comment updatedComment = commentRepositoryJPA.save(comment.get());
+            propagateEditToProject(updatedComment);
+            propagateEditToIssue(updatedComment);
+            return new ResponseEntity<>(mapCommentToDTO(updatedComment), HttpStatus.OK);
         } else {
             logger.debug(MessageFormat.format("No change applied to comment with {0} ID", commentId));
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -149,5 +156,17 @@ public class CommentServiceImpl implements CommentService {
 
     private List<CommentDTO> convertToDTOList(List<Comment> commentList) {
         return commentList.stream().map(this::mapCommentToDTO).collect(Collectors.toList());
+    }
+
+    private void propagateEditToProject(Comment comment) {
+        Project project = projectRepositoryJPA.getById(comment.getIssue().getProject().getId());
+        project.setEdited(comment.getEdited());
+        projectRepositoryJPA.save(project);
+    }
+
+    private void propagateEditToIssue(Comment comment) {
+        Issue issue = issueRepositoryJPA.getById(comment.getIssue().getId());
+        issue.setEdited(comment.getEdited());
+        issueRepositoryJPA.save(issue);
     }
 }
