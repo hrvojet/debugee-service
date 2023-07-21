@@ -45,9 +45,9 @@ public class IssueController {
     }
 
     // https://stackoverflow.com/questions/54774350/multiple-sort-optional-query-spring-rest-controller-configuration-with-paginat
-    @PostMapping("/search/{projectId}")
+    @PostMapping("/search")
     public Page<IssueDTO> searchIssuesByProject(
-            @PathVariable final long projectId,
+            @RequestParam final Long projectId,
             @RequestParam(required = false, defaultValue = "0") final int page,
             @RequestParam(required = false, defaultValue = "5") final int size,
             @RequestParam(required = false, defaultValue = "ASC") final String sortBy,
