@@ -1,5 +1,7 @@
 package htrcak.backend.exceptions;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             EntityNotFoundException.class,
-            EmptyResultDataAccessException.class
+            EmptyResultDataAccessException.class,
+            UserNotAllowedException.class
     })
     public final ResponseEntity<?> handleExceptions(Exception exception, WebRequest request) {
 
@@ -24,6 +27,8 @@ public class GlobalExceptionHandler {
 
         if (exception instanceof EntityNotFoundException || exception instanceof EmptyResultDataAccessException) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+        } else if (exception instanceof UserNotAllowedException) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
         }
