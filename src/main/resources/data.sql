@@ -13,6 +13,7 @@ INSERT INTO project(id, owner, title, description, created, edited, closed_issue
 INSERT INTO project(id, owner, title, description, created, edited, closed_issues, opened_issues) VALUES (2, 98, 'Debugee-backend-services', 'Backend service for debugee project written in java/spring', '2022-12-22 21.00.00', '2022-12-22 21.00.00', 0, 0);
 INSERT INTO project(id, owner, title, description, created, edited, closed_issues, opened_issues) VALUES (3, 97, 'python-pandas', 'Pandas framework for data manipulation or whatnot', '2022-12-12 21.43.00', '2022-12-12 21.43.00', 0, 0);
 INSERT INTO project(id, owner, title, description, created, edited, closed_issues, opened_issues) VALUES (4, 3, 'Devs project', 'DEV dev', '2023-03-21 15.43.44', '2023-03-21 15.43.44', 0, 0);
+INSERT INTO project(id, owner, title, description, created, edited, closed_issues, opened_issues) VALUES (5, 7, 'Newbie project', 'Some stuf', '2023-03-23 16.23.14', '2023-03-28 14.43.44', 0, 0);
 
 INSERT INTO issue(id, original_poster, title, created, edited, comment_number, issue_type, project_id) VALUES (1, 5, 'Problem with persistence', '2023-03-21 09.11.00', '2023-03-21 09.11.00', 0, 'Bug', 1);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 1;
@@ -28,6 +29,12 @@ UPDATE project SET opened_issues = opened_issues + 1 where id = 1;
 
 INSERT INTO issue(id, original_poster, title, created, edited, comment_number, issue_type, project_id) VALUES (5, 3, 'We need better solution', '2023-07-12 09.11.00', '2023-07-12 09.11.00', 0, 'Feature', 2);
 UPDATE project SET opened_issues = opened_issues + 1 where id = 2;
+
+INSERT INTO issue(id, original_poster, title, created, edited, comment_number, issue_type, project_id) VALUES (6, 97, 'Meow meow meow', '2023-11-12 09.11.00', '2023-11-12 09.11.00', 0, 'Feature', 5);
+UPDATE project SET opened_issues = opened_issues + 1 where id = 5;
+
+INSERT INTO issue(id, original_poster, title, created, edited, comment_number, issue_type, project_id) VALUES (7, 7, 'Where do I open this?', '2023-11-12 09.11.00', '2023-11-12 09.11.00', 0, 'Feature', 5);
+UPDATE project SET opened_issues = opened_issues + 1 where id = 5;
 
 INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (1, 5, 'This is some long text that is here, bla bla...', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1);
 UPDATE issue SET comment_number = comment_number + 1 WHERE id = 1;
