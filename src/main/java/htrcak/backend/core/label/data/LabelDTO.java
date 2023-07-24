@@ -15,7 +15,23 @@ public class LabelDTO {
     public LabelDTO(Label label) {
         this.id = label.getId();
         this.name = label.getName();
-        this.description = label.getDescription();
+        this.description = label.getDescription() == null ? "" : label.getDescription();
         this.colorHex = label.getColorHex();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getColorHex() {
+        return colorHex;
     }
 }

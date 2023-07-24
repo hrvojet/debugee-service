@@ -1,6 +1,7 @@
 package htrcak.backend.core.label;
 
 import htrcak.backend.core.issues.Issue;
+import htrcak.backend.core.label.data.LabelPostValidator;
 import htrcak.backend.core.projects.Project;
 
 import javax.persistence.*;
@@ -35,6 +36,13 @@ public class Label {
     public Label(String name, String colorHex, Project project) {
         this.name = name;
         this.colorHex = colorHex;
+        this.project = project;
+    }
+
+    public Label(LabelPostValidator labelPostValidator, Project project) {
+        this.name = labelPostValidator.getName();
+        this.colorHex = labelPostValidator.getColorHex();
+        this.description = labelPostValidator.getDescription();
         this.project = project;
     }
 
