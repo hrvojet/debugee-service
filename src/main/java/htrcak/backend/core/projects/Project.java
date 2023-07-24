@@ -1,6 +1,7 @@
 package htrcak.backend.core.projects;
 
 import htrcak.backend.core.issues.Issue;
+import htrcak.backend.core.label.Label;
 import htrcak.backend.core.user.model.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -35,6 +36,9 @@ public class Project {
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Issue> issues;
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY,  orphanRemoval = true)
+    private Set<Label> labels;
 
     @Column
     private int closedIssues;
@@ -87,6 +91,14 @@ public class Project {
 
     public void setIssues(Set<Issue> issues) {
         this.issues = issues;
+    }
+
+    public Set<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(Set<Label> labels) {
+        this.labels = labels;
     }
 
     public int getClosedIssues() {

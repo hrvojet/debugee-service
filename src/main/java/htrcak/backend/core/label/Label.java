@@ -1,0 +1,96 @@
+package htrcak.backend.core.label;
+
+import htrcak.backend.core.issues.Issue;
+import htrcak.backend.core.projects.Project;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+public class Label {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "label_name")
+    private String name;
+
+    @Column
+    private String description;
+
+    @Column
+    private String colorHex;
+
+    @ManyToOne
+    @JoinColumn(name="project_id", referencedColumnName = "id")
+    private Project project;
+
+    @ManyToMany(mappedBy = "labelsSet")
+    private Set<Issue> usedIssues = new HashSet<>();
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getColorHex() {
+        return colorHex;
+    }
+
+    public void setColorHex(String colorHex) {
+        this.colorHex = colorHex;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public Set<Issue> getUsedIssues() {
+        return usedIssues;
+    }
+
+    public void setUsedIssues(Set<Issue> usedIssues) {
+        this.usedIssues = usedIssues;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+
+        if(!(o instanceof Label))
+            return false;
+
+        return id != null && id.equals(((Label) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+}

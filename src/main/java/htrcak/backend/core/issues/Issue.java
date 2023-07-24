@@ -1,6 +1,7 @@
 package htrcak.backend.core.issues;
 
 import htrcak.backend.core.comments.Comment;
+import htrcak.backend.core.label.Label;
 import htrcak.backend.core.projects.Project;
 import htrcak.backend.core.user.model.User;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -18,7 +20,7 @@ public class Issue {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column
     private String title;
@@ -35,7 +37,7 @@ public class Issue {
     private int commentNumber;
 
     @Column
-    private String issueType; //TODO list
+    private String issueType; //TODO labels
 
     @ManyToOne
     @JoinColumn(name="project_id", referencedColumnName = "id")
@@ -51,6 +53,14 @@ public class Issue {
 
     @Column
     private boolean isOpened;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "issue_label",
+            joinColumns = { @JoinColumn(name = "issue_id") },
+            inverseJoinColumns = { @JoinColumn(name = "label_id") }
+    )
+    private Set<Label> labelsSet = new HashSet<>();
 
     public Issue() {
     }
@@ -149,5 +159,39 @@ public class Issue {
 
     public void setEdited(LocalDateTime edited) {
         this.edited = edited;
+    }
+
+    public Set<Label> getLabelsSet() {
+        return labelsSet;
+    }
+
+    public void setLabelsSet(Set<Label> labelsSet) {
+        this.labelsSet = labelsSet;
+    }
+
+    public void addLabel(Label label) {
+        labelsSet.add(label);
+        label.getUsedIssues().add(this);
+    }
+
+    public void removeLabel(Label label) {
+        labelsSet.remove(label);
+        label.getUsedIssues().remove(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+
+        if(!(o instanceof Issue))
+            return false;
+
+        return id != null && id.equals(((Issue) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

@@ -17,7 +17,16 @@ CREATE TABLE IF NOT EXISTS project (
     closed_issues INT NOT NULL,
     opened_issues INT NOT NULL,
     FOREIGN KEY (owner) REFERENCES gitlab_user(id)
-    );
+);
+
+CREATE TABLE IF NOT EXISTS label (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    project_id INT NOT NULL,
+    label_name VARCHAR(64) NOT NULL,
+    description VARCHAR(256),
+    color_hex VARCHAR(7),
+    FOREIGN KEY (project_id) REFERENCES project(id)
+);
 
 CREATE TABLE IF NOT EXISTS issue (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -42,4 +51,9 @@ CREATE TABLE IF NOT EXISTS comment (
     edited TIMESTAMP NOT NULL,
     FOREIGN KEY (issue_id) REFERENCES issue(id),
     FOREIGN KEY (author) REFERENCES gitlab_user(id)
+);
+
+CREATE TABLE IF NOT EXISTS issue_label (
+    label_id INT NOT NULL,
+    issue_id INT NOT NULL
 );

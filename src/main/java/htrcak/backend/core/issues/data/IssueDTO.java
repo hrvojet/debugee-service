@@ -1,10 +1,13 @@
 package htrcak.backend.core.issues.data;
 
 import htrcak.backend.core.issues.Issue;
+import htrcak.backend.core.label.data.LabelDTO;
 import htrcak.backend.core.user.model.User;
 import htrcak.backend.core.user.model.UserDTO;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class IssueDTO {
 
@@ -26,6 +29,8 @@ public class IssueDTO {
 
     private boolean isOpened;
 
+    private Set<LabelDTO> labels;
+
     public IssueDTO(Issue issue) {
         this.id = issue.getId();
         this.title = issue.getTitle();
@@ -36,6 +41,7 @@ public class IssueDTO {
         this.isOpened = issue.isOpened();
         this.created = issue.getCreated();
         this.edited = issue.getEdited();
+        this.labels = issue.getLabelsSet().stream().map(LabelDTO::new).collect(Collectors.toSet());
     }
 
     public long getId() {
