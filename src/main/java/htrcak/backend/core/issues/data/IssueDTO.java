@@ -79,4 +79,8 @@ public class IssueDTO {
     public LocalDateTime getEdited() {
         return edited;
     }
+
+    public Set<LabelDTO> getLabels() {
+        return labels;
+    }
 }
