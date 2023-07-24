@@ -30,11 +30,19 @@ public class Label {
     @ManyToMany(mappedBy = "labelsSet")
     private Set<Issue> usedIssues = new HashSet<>();
 
-    public long getId() {
+    public Label() {}
+
+    public Label(String name, String colorHex, Project project) {
+        this.name = name;
+        this.colorHex = colorHex;
+        this.project = project;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
