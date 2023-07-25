@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("label")
 public class LabelController {
 
     private final LabelService labelService;
@@ -19,32 +18,32 @@ public class LabelController {
         this.labelService = labelService;
     }
 
-    @GetMapping("/{projectID}")
+    @GetMapping("labels/{projectID}")
     public ResponseEntity<List<LabelDTO>> getAllLabelsForProject(@PathVariable Long projectID) {
         return labelService.getLabelsForProject(projectID);
     }
 
-    @PostMapping("/{projectID}")
+    @PostMapping("label/{projectID}")
     public ResponseEntity<LabelDTO> saveNewLabelForProject(@PathVariable Long projectID, @Valid @RequestBody LabelPostValidator labelPostValidator) {
         return labelService.saveNewLabel(projectID, labelPostValidator);
     }
 
-    @PostMapping("/{labelID}/issue/{issueID}")
+    @PostMapping("label/{labelID}/issue/{issueID}")
     public ResponseEntity<?> addLabelToIssue(@PathVariable Long issueID, @PathVariable Long labelID) {
         return labelService.addLabelToIssue(issueID, labelID);
     }
 
-    @DeleteMapping("/{labelID}/issue/{issueID}")
+    @DeleteMapping("label/{labelID}/issue/{issueID}")
     public ResponseEntity<?> removeLabelFromIssue(@PathVariable Long issueID, @PathVariable Long labelID) {
         return labelService.removeLabelFromIssue(issueID, labelID);
     }
 
-    @PatchMapping("/{labelID}")
+    @PatchMapping("label/{labelID}")
     public ResponseEntity<?> editLabel(@PathVariable Long labelID, @RequestBody LabelPatchValidator labelPatchValidator) {
         return labelService.editLabel(labelID, labelPatchValidator);
     }
 
-    @DeleteMapping("/{labelID}")
+    @DeleteMapping("label/{labelID}")
     public ResponseEntity<?> deleteLabel(@PathVariable Long labelID) {
         return labelService.deleteLabel(labelID);
     }
