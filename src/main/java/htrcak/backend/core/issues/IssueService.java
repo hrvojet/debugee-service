@@ -22,7 +22,7 @@ public interface IssueService {
 
     ResponseEntity<IssueDTO> updateById(IssuePatchValidator issuePatchValidator, long issueId);
 
-    Page<IssueDTO> searchIssues(Long id, Pageable pageable, IssueSearchCommand isc);
+    Page<IssueDTO> searchIssues(Long projectID, Pageable pageable, IssueSearchCommand isc, Long labelID);
 
     Page<IssueDTO> getAllIssuesForProject(long id, Pageable pageable);
 }

@@ -3,6 +3,8 @@ package htrcak.backend.core.issues;
 import htrcak.backend.core.comments.CommentService;
 import htrcak.backend.core.comments.data.CommentPostValidator;
 import htrcak.backend.core.issues.data.*;
+import htrcak.backend.core.label.Label;
+import htrcak.backend.core.label.data.LabelRepositoryJPA;
 import htrcak.backend.core.projects.Project;
 import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
 import htrcak.backend.utils.SecurityContextHolderUtils;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 
 import static htrcak.backend.utils.jpa.IssueSpecification.getById;
 import static htrcak.backend.utils.jpa.IssueSpecification.findComment;
+import static htrcak.backend.utils.jpa.IssueSpecification.findLabel;
 import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
@@ -45,11 +48,9 @@ public class IssueServiceImpl implements IssueService {
 
 
     @Override
-    public Page<IssueDTO> searchIssues(Long id, Pageable pageable, IssueSearchCommand isc) {
-        return issueRepositoryJPA.findAll(
-                where(getById(id).and(findComment(isc))),
-                pageable
-        ).map(IssueDTO::new);
+    public Page<IssueDTO> searchIssues(Long projectID, Pageable pageable, IssueSearchCommand isc, Long labelID) {
+        return issueRepositoryJPA.findAll(where(getById(projectID).and(findComment(isc)).and(findLabel(labelID))), pageable)
+                .map(IssueDTO::new);
     }
 
     @Override
