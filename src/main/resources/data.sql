@@ -60,7 +60,7 @@ UPDATE issue SET comment_number = comment_number + 1 WHERE id = 1;
 INSERT INTO comment(id, author, text, created, edited, issue_id) VALUES (8, 5, '2 issue', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 2);
 UPDATE issue SET comment_number = comment_number + 1 WHERE id = 2;
 
-INSERT INTO label(id, project_id, label_name, description, color_hex) VALUES (1, 1, 'Bug', 'Bug explaining', 'fff');
-INSERT INTO label(id, project_id, label_name, description, color_hex) VALUES (2, 1, 'Issue', 'Issue explaining', '333');
+INSERT INTO label(id, project_id, label_name, description, color_hex) VALUES (1, 1, 'Bug', 'Bug explaining', '#fff');
+INSERT INTO label(id, project_id, label_name, description, color_hex) VALUES (2, 1, 'Issue', 'Issue explaining', '#333');
 
 INSERT INTO issue_label(label_id, issue_id) VALUES (1,1);
