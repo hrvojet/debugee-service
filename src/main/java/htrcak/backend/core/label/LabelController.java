@@ -3,6 +3,8 @@ package htrcak.backend.core.label;
 import htrcak.backend.core.label.data.LabelDTO;
 import htrcak.backend.core.label.data.LabelPatchValidator;
 import htrcak.backend.core.label.data.LabelPostValidator;
+import htrcak.backend.core.label.data.LabelUpdatePostValidator;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +38,11 @@ public class LabelController {
     @DeleteMapping("label/{labelID}/issue/{issueID}")
     public ResponseEntity<?> removeLabelFromIssue(@PathVariable Long issueID, @PathVariable Long labelID) {
         return labelService.removeLabelFromIssue(issueID, labelID);
+    }
+
+    @PostMapping("label/update-issue/{issueID}")
+    public ResponseEntity<HttpStatus> updateLabelsForIssue(@PathVariable long issueID, @RequestBody LabelUpdatePostValidator labelUpdatePostValidator) {
+        return this.labelService.updateLabelsForIssue(issueID, labelUpdatePostValidator);
     }
 
     @PatchMapping("label/{labelID}")

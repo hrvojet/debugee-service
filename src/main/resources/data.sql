@@ -62,5 +62,9 @@ UPDATE issue SET comment_number = comment_number + 1 WHERE id = 2;
 
 INSERT INTO label(id, project_id, label_name, description, color_hex) VALUES (1, 1, 'Bug', 'Bug explaining', '#ffffff');
 INSERT INTO label(id, project_id, label_name, description, color_hex) VALUES (2, 1, 'Issue', 'Issue explaining', '#f20202');
+INSERT INTO label(id, project_id, label_name, description, color_hex) VALUES (3, 5, 'Bug', 'Bug is bad', '#ffffff');
+INSERT INTO label(id, project_id, label_name, description, color_hex) VALUES (4, 5, 'Issue', 'Issue is ok', '#f20202');
+INSERT INTO label(id, project_id, label_name, description, color_hex) VALUES (5, 5, 'Feature', 'Feature is best', '#00EB04');
 
 INSERT INTO issue_label(label_id, issue_id) VALUES (1,1);
+INSERT INTO issue_label(label_id, issue_id) VALUES (5,6);

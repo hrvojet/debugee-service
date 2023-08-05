@@ -2,10 +2,7 @@ package htrcak.backend.core.label;
 
 import htrcak.backend.core.issues.Issue;
 import htrcak.backend.core.issues.data.IssueRepositoryJPA;
-import htrcak.backend.core.label.data.LabelDTO;
-import htrcak.backend.core.label.data.LabelPatchValidator;
-import htrcak.backend.core.label.data.LabelPostValidator;
-import htrcak.backend.core.label.data.LabelRepositoryJPA;
+import htrcak.backend.core.label.data.*;
 import htrcak.backend.core.projects.Project;
 import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
 import htrcak.backend.exceptions.UserNotAllowedException;
@@ -151,6 +148,30 @@ public class LabelServiceImpl implements LabelService {
 
         labelRepositoryJPA.delete(label.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<HttpStatus> updateLabelsForIssue(long issueID, LabelUpdatePostValidator labelUpdatePostValidator) {
+
+        Issue issueToUpdate = issueRepositoryJPA.getById(issueID);
+
+        checkIfUserIsAllowed(issueToUpdate);
+
+        for (Long labelID : labelUpdatePostValidator.getAddLabelsWithID()) {
+            Label tmpLabel = labelRepositoryJPA.getById(labelID);
+            issueToUpdate.addLabel(tmpLabel);
+        }
+
+        for (Long labelID : labelUpdatePostValidator.getRemoveLabelsWithID()) {
+            Label tmpLabel = labelRepositoryJPA.getById(labelID);
+            issueToUpdate.removeLabel(tmpLabel);
+        }
+
+        if (!labelUpdatePostValidator.getRemoveLabelsWithID().isEmpty() || !labelUpdatePostValidator.getAddLabelsWithID().isEmpty()) {
+            issueRepositoryJPA.save(issueToUpdate);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private <T> void checkIfUserIsAllowed(T t) {
