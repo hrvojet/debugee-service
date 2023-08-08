@@ -1,11 +1,14 @@
 package htrcak.backend.core.issues.data;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class IssuePatchValidator {
 
     private String title;
 
     private String issueType;
 
+    @JsonProperty
     private boolean isOpened;
 
 
