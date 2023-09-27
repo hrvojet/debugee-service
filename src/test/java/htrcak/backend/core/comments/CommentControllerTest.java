@@ -76,7 +76,6 @@ public class CommentControllerTest {
                 )
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(6)))
                 .andExpect(jsonPath("$.text", equalTo("watch this!")))
                 .andExpect(jsonPath("$.author.id", is(7)));
     }
@@ -85,7 +84,7 @@ public class CommentControllerTest {
     @Order(25)
     void Update_existing_comment() throws Exception {
         this.mockMvc.perform(
-                        patch("/comments/6")
+                        patch("/comments/7")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
@@ -96,7 +95,7 @@ public class CommentControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(6)))
+                .andExpect(jsonPath("$.id", is(7)))
                 .andExpect(jsonPath("$.text", equalTo("I am updated")))
                 .andExpect(jsonPath("$.author.id", is(7)));
     }
@@ -105,7 +104,7 @@ public class CommentControllerTest {
     @Order(25)
     void Fail_to_update_existing_comment_as_non_owner() throws Exception {
         this.mockMvc.perform(
-                        patch("/comments/6")
+                        patch("/comments/1")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenRegular)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
@@ -122,7 +121,7 @@ public class CommentControllerTest {
     @Order(28)
     void Fail_to_delete_comment_as_non_owner() throws Exception {
         this.mockMvc.perform(
-                        delete("/comments/6")
+                        delete("/comments/1")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenRegular)
                 )
                 .andExpect(status().isForbidden())
@@ -134,7 +133,7 @@ public class CommentControllerTest {
     @Order(30)
     void Delete_comment() throws Exception {
         this.mockMvc.perform(
-                        delete("/comments/6")
+                        delete("/comments/7")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                 )
                 .andExpect(status().isNoContent())

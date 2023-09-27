@@ -42,7 +42,7 @@ class ProjectControllerTest {
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.['content']").isArray())
                 .andDo(print());
     }
 
@@ -58,7 +58,7 @@ class ProjectControllerTest {
                 .andExpect(content().json("""
                     {
                         "id": 1,
-                        "title": "Title 1",
+                        "title": "Debugee-web",
                         "description": "Description of the first project",
                         "openedIssues": 4,
                         "closedIssues": 0,
@@ -89,7 +89,7 @@ class ProjectControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("""
                     {
-                        "id": 5,
+                        "id": 6,
                         "title": "Title of a new project",
                         "description": "Description of a new project",
                         "openedIssues": 0,
@@ -120,9 +120,9 @@ class ProjectControllerTest {
                 .andExpect(content().json("""
                         {
                             "id": 5,
-                            "title": "Title of a new project",
+                            "title": "Newbie project",
                             "description": "description UPDATED",
-                            "openedIssues": 0,
+                            "openedIssues": 2,
                             "closedIssues": 0,
                             "owner": {
                                 "id": 7,

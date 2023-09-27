@@ -40,7 +40,7 @@ public class IssueControllerTest {
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$['content']").isArray())
                 .andDo(print());
     }
 
@@ -58,7 +58,7 @@ public class IssueControllerTest {
                         "id": 1,
                         "projectId": 1,
                         "title": "Problem with persistence",
-                        "commentNumber": 5,
+                        "commentNumber": 7,
                         "issueType": "Bug",
                         "originalPoster": {
                             "id": 5,
@@ -73,14 +73,13 @@ public class IssueControllerTest {
     @Order(20)
     void Save_new_issue() throws Exception {
         this.mockMvc.perform(
-                        post("/issues")
+                        post("/issues/2")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                 {
                                     "title":"Title POST2",
-                                    "firstComment":"sec comment POST",
-                                    "projectId":2
+                                    "firstComment":"sec comment POST"
                                 }
                                 """)
                 )
@@ -88,10 +87,10 @@ public class IssueControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("""
                     {
-                        "id": 6,
+                        "id": 8,
                         "projectId": 2,
                         "title": "Title POST2",
-                        "commentNumber": 0,
+                        "commentNumber": 1,
                         "issueType": "",
                         "originalPoster": {
                             "id": 7,
@@ -106,44 +105,47 @@ public class IssueControllerTest {
     @Order(21)
     void Search_for_issues() throws Exception {
         this.mockMvc.perform(
-                        post("/issues/search/1")
+                        post("/issues/search?projectId=1&page=0&size=5")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                 {
-                                    "title":"dep"
+                                    "title":"dependency"
                                 }
                                 """)
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("""
-                    [
-                        {
-                            "id": 2,
-                            "projectId": 1,
-                            "title": "Unable to install dependency",
-                            "commentNumber": 0,
-                            "issueType": "Feature",
-                            "originalPoster": {
-                                "id": 5,
-                                "username": "Reporter",
-                                "email": "reporter@asd.asd"
+                    {
+                    "content": [
+                            {
+                                "id": 2,
+                                "projectId": 1,
+                                "title": "Unable to install dependency",
+                                "commentNumber": 1,
+                                "issueType": "Feature",
+                                "originalPoster": {
+                                    "id": 5,
+                                    "username": "Reporter",
+                                    "email": "reporter@asd.asd"
+                                }
+                            },
+                            {
+                                "id": 4,
+                                "projectId": 1,
+                                "title": "How to uninstall dependency",
+                                "commentNumber": 0,
+                                "issueType": "Feature",
+                                "originalPoster": {
+                                    "id": 3,
+                                    "username": "developer",
+                                    "email": "developer@example.com"
+                                }
                             }
-                        },
-                        {
-                            "id": 4,
-                            "projectId": 1,
-                            "title": "How to uninstall dependency",
-                            "commentNumber": 0,
-                            "issueType": "Feature",
-                            "originalPoster": {
-                                "id": 5,
-                                "username": "Reporter",
-                                "email": "reporter@asd.asd"
-                            }
-                        }
-                    ]
+                        ],
+                        "totalElements": 2
+                    }
                     """));
     }
 
@@ -151,7 +153,7 @@ public class IssueControllerTest {
     @Order(25)
     void Update_existing_issue() throws Exception {
         this.mockMvc.perform(
-                        patch("/issues/6")
+                        patch("/issues/7")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
@@ -164,11 +166,11 @@ public class IssueControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("""
                             {
-                            "id": 6,
-                            "projectId": 2,
+                            "id": 7,
+                            "projectId": 5,
                             "title": "title UPDATED",
                             "commentNumber": 0,
-                            "issueType": "",
+                            "issueType": "Feature",
                             "originalPoster": {
                                 "id": 7,
                                 "username": "debugee",
