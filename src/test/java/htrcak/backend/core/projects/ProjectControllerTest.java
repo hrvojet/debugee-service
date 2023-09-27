@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Order(5)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //@ActiveProfiles("test")
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -159,7 +160,7 @@ class ProjectControllerTest {
     @Order(30)
     void Delete_project() throws Exception {
         this.mockMvc.perform(
-                delete("/projects/5")
+                delete("/projects/6")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
         )
                 .andExpect(status().isNoContent())

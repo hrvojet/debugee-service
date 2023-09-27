@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Order(50)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CommentControllerTest {
 
