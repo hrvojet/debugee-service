@@ -103,7 +103,7 @@ public class IssueServiceImpl implements IssueService {
         if (issue.isEmpty()) {
             logger.warn(MessageFormat.format("There is no issue with id [{0}]", issueId));
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (issue.get().getOriginalPoster().getId() != securityContextHolderUtils.getCurrentUser().getId()) {
+        } else if (issue.get().getOriginalPoster().getId() != securityContextHolderUtils.getCurrentUser().getId() && issue.get().getProject().getOwner().getId() != securityContextHolderUtils.getCurrentUser().getId()) {
             logger.warn(MessageFormat.format("User with id [{0}] not allowed to modify issue with id [{1}]", securityContextHolderUtils.getCurrentUser().getId(), issueId));
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
