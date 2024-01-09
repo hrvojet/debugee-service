@@ -32,6 +32,9 @@ public class CallbackController {
     @Value("${gitlab.web-url}")
     private String webUrl;
 
+    @Value("${gitlab.token-endpoint}")
+    private String gitlabTokenEndpoint;
+
     public CallbackController(RestTemplate restTemplate, JwtService jwtService) {
         this.restTemplate = restTemplate;
         this.jwtService = jwtService;
@@ -53,7 +56,7 @@ public class CallbackController {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(generateParams(code), headers);
 
-        ResponseEntity<Map> response = restTemplate.postForEntity("http://192.168.99.101/oauth/token", request, Map.class); // TODO replace GL url with app.prop value
+        ResponseEntity<Map> response = restTemplate.postForEntity(gitlabTokenEndpoint, request, Map.class);
         System.out.println(response.getBody());
 
         return jwtService.generateJWT((String) response.getBody().get("access_token")); // TODO handle error for emptyBody

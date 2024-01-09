@@ -38,7 +38,7 @@ gitlab:
   token-endpoint: http://192.168.99.101/oauth/token
   client-id: 7bb581ae9321027b75d59f9b35a7963255dc42ad3ce8a6e4647d0259b26713dc
   callback-url: http://192.168.0.212:8080/callback/gitlab
-  web-url: http://localhost:4200
+  web-url: http://127.0.0.1:4200
 
 ---
 spring:
