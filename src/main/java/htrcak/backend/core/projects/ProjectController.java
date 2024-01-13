@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("projects")
+@RequestMapping("api/projects")
 public class ProjectController {
 
     private final ProjectService projectService;

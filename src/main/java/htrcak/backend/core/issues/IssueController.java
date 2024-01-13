@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("issues")
+@RequestMapping("api/issues")
 public class IssueController {
 
     private final IssueService issueService;
