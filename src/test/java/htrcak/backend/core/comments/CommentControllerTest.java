@@ -38,7 +38,7 @@ public class CommentControllerTest {
     @Order(10)
     void List_all_comments() throws Exception {
         this.mockMvc.perform(
-                        get("/comments")
+                        get("/api/comments")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                 )
                 .andExpect(status().isOk())
@@ -51,7 +51,7 @@ public class CommentControllerTest {
     @Order(15)
     void Get_a_comment_by_ID() throws Exception {
         this.mockMvc.perform(
-                        get("/comments/1")
+                        get("/api/comments/1")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                 )
                 .andExpect(status().isOk())
@@ -65,7 +65,7 @@ public class CommentControllerTest {
     @Order(20)
     void Save_new_comments() throws Exception {
         this.mockMvc.perform(
-                        post("/comments")
+                        post("/api/comments")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
@@ -85,7 +85,7 @@ public class CommentControllerTest {
     @Order(25)
     void Update_existing_comment() throws Exception {
         this.mockMvc.perform(
-                        patch("/comments/7")
+                        patch("/api/comments/7")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
@@ -105,7 +105,7 @@ public class CommentControllerTest {
     @Order(25)
     void Fail_to_update_existing_comment_as_non_owner() throws Exception {
         this.mockMvc.perform(
-                        patch("/comments/1")
+                        patch("/api/comments/1")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenRegular)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
@@ -122,7 +122,7 @@ public class CommentControllerTest {
     @Order(28)
     void Fail_to_delete_comment_as_non_owner() throws Exception {
         this.mockMvc.perform(
-                        delete("/comments/1")
+                        delete("/api/comments/1")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenRegular)
                 )
                 .andExpect(status().isForbidden())
@@ -134,7 +134,7 @@ public class CommentControllerTest {
     @Order(30)
     void Delete_comment() throws Exception {
         this.mockMvc.perform(
-                        delete("/comments/7")
+                        delete("/api/comments/7")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                 )
                 .andExpect(status().isNoContent())
@@ -144,7 +144,7 @@ public class CommentControllerTest {
     @Test
     void Fail_to_fetch_comments_without_authorization() throws Exception {
         this.mockMvc.perform(
-                        get("/comments")
+                        get("/api/comments")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer badJwt")
                 )
                 .andExpect(status().isUnauthorized());

@@ -38,7 +38,7 @@ class ProjectControllerTest {
     @Order(10)
     void Get_a_list_of_all_projects() throws Exception {
         this.mockMvc.perform(
-                get("/projects")
+                get("/api/projects")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
         )
                 .andExpect(status().isOk())
@@ -51,7 +51,7 @@ class ProjectControllerTest {
     @Order(15)
     void Get_a_project_by_ID() throws Exception {
         this.mockMvc.perform(
-                        get("/projects/1")
+                        get("/api/projects/1")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                 )
                 .andExpect(status().isOk())
@@ -76,7 +76,7 @@ class ProjectControllerTest {
     @Order(20)
     void Save_new_project() throws Exception {
         this.mockMvc.perform(
-                post("/projects")
+                post("/api/projects")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -107,7 +107,7 @@ class ProjectControllerTest {
     @Order(25)
     void Update_existing_project() throws Exception {
         this.mockMvc.perform(
-                        patch("/projects/5")
+                        patch("/api/projects/5")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
@@ -137,7 +137,7 @@ class ProjectControllerTest {
     @Order(27)
     void Handle_trying_to_delete_non_existing_project() throws Exception {
         this.mockMvc.perform(
-                        delete("/projects/44")
+                        delete("/api/projects/44")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenRegular)
                 )
                 .andExpect(status().isNotFound())
@@ -148,7 +148,7 @@ class ProjectControllerTest {
     @Order(28)
     void Fail_to_delete_project_as_non_owner() throws Exception {
         this.mockMvc.perform(
-                        delete("/projects/5")
+                        delete("/api/projects/5")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenRegular)
                 )
                 .andExpect(status().isForbidden())
@@ -160,7 +160,7 @@ class ProjectControllerTest {
     @Order(30)
     void Delete_project() throws Exception {
         this.mockMvc.perform(
-                delete("/projects/6")
+                delete("/api/projects/6")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessTokenAdmin)
         )
                 .andExpect(status().isNoContent())
@@ -170,7 +170,7 @@ class ProjectControllerTest {
     @Test
     void Fail_to_fetch_projects_without_authorization() throws Exception {
         this.mockMvc.perform(
-                get("/projects")
+                get("/api/projects")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer badJwt")
         )
                 .andExpect(status().isUnauthorized());
