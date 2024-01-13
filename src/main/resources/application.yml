@@ -9,7 +9,7 @@ spring:
           jwk-set-uri: http://192.168.99.101/oauth/discovery/keys
 
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: none
 
@@ -31,8 +31,13 @@ logging:
       springframework:
         security: DEBUG
       hibernate:
-        sql: DEBUG
-        type: TRACE
+        sql: ERROR
+        type: ERROR
+    htrcak:
+      backend: debug
+
+cors:
+  allowed-origins: http://localhost:4200,http://127.0.0.1:4200
 
 gitlab:
   token-endpoint: http://192.168.99.101/oauth/token
@@ -48,3 +53,18 @@ spring:
 
   datasource:
     url: jdbc:h2:mem:debugee_test;DB_CLOSE_DELAY=-1
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+cors:
+  allowed-origins: http://20.82.136.123,https://debugee.live
+
+gitlab:
+  token-endpoint: http://164.90.165.32/oauth/token
+  client-id: 4aaa243bf068dd1c42616d15d555e394d9a76cc51ca9d2fac4af89ce5e035a10
+  callback-url: http://20.82.136.123/callback/gitlab
+  web-url: http://20.82.136.123
