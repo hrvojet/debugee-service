@@ -7,6 +7,7 @@ import htrcak.backend.security.UserAuthentication;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +25,9 @@ public class JwtServiceImpl implements JwtService{
 
     private static final Logger log = LoggerFactory.getLogger(JwtServiceImpl.class);
     private static final String AUTHORITIES_KEY = "authorities";
+
+    @Value("${gitlab.uri}")
+    private String gitlabUri;
 
     private final String signingKey = "signingKeyForSigningJWTtokens";
     private final RestTemplate restTemplate;
@@ -54,9 +58,11 @@ public class JwtServiceImpl implements JwtService{
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessTokenGitLab);
         HttpEntity<Void> request = new HttpEntity<>(headers);
+        log.debug("Setting headers in 'generateJWT' method");
 
-        // TODO add to properties GitLab instance uri and append
-        ResponseEntity<Map> response = restTemplate.exchange("http://192.168.99.101/api/v4/user", HttpMethod.GET, request, Map.class);
+        String gitlabUserEndpoint = gitlabUri + "/api/v4/user";
+        log.debug("Fetching user information from GitLab...");
+        ResponseEntity<Map> response = restTemplate.exchange(gitlabUserEndpoint, HttpMethod.GET, request, Map.class);
 
         String isAdmin = (response.getBody() != null && response.getBody().get("is_admin") != null && (boolean)response.getBody().get("is_admin")) ? "ADMIN" : "";
         //Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret), SignatureAlgorithm.HS512.getJcaName());

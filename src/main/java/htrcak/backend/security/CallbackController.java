@@ -37,8 +37,8 @@ public class CallbackController {
     @Value("${gitlab.web-url}")
     private String webUrl;
 
-    @Value("${gitlab.token-endpoint}")
-    private String gitlabTokenEndpoint;
+    @Value("${gitlab.uri}")
+    private String gitlabUri;
 
     public CallbackController(RestTemplate restTemplate, JwtService jwtService) {
         this.restTemplate = restTemplate;
@@ -63,6 +63,7 @@ public class CallbackController {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(generateParams(code), headers);
 
+        String gitlabTokenEndpoint = gitlabUri + "/oauth/token";
         log.debug("Exchanging code for token using 'restTemplate', sending code to: " + gitlabTokenEndpoint);
         ResponseEntity<Map> response = restTemplate.postForEntity(gitlabTokenEndpoint, request, Map.class);
         log.debug(MessageFormat.format("Got token in body: {0}", response.getBody()));
@@ -75,7 +76,7 @@ public class CallbackController {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("code", code);
         params.add("client_id", clientId);
-        params.add("redirect_uri", callbackUrl);
+        params.add("redirect_uri", callbackUrl); // TODO merge same origin, append callback endpoint
         params.add("grant_type", "authorization_code");
         return params;
     }
