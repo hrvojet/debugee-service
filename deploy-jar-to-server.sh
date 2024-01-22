@@ -24,8 +24,7 @@ cd target || echo "Missing 'target', build project with mvn clean install!"
 scp "${JAR_NAME}" hrvoje@20.82.136.123:~/.be-deploy/new_jar || echo "Failed to scp"
 
 # Run remote deployment script
-# TODO: nohup java -jar -Dspring.profiles.active=prod backend-0.0.1-SNAPSHOT.jar > be.log 2>&1 &
-ssh hrvoje@20.82.136.123 "/home/hrvoje/be-deploy.sh"
+ssh hrvoje@20.82.136.123 "/home/hrvoje/be-deploy.sh -jn=$JAR_NAME"
 
 
 # goto root
