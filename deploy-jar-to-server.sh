@@ -12,19 +12,20 @@ PACKAGE_NAME=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="artif
 PACKAGE_VERSION=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' pom.xml)
 JAR_NAME="${PACKAGE_NAME}-${PACKAGE_VERSION}.jar"
 
+#create filename from pom.xml
 echo "Full path is $ROOT_WORK_DIR"
 echo "Jar name: ${JAR_NAME}"
-
-#create filename from pom.xml
 
 #goto target
 echo "Changing work directory to 'target'"
 cd target || echo "Missing 'target', build project with mvn clean install!"
 
-#scp
-scp "${JAR_NAME}" hrvoje@20.82.136.123:~ || echo "Failed to scp"
+# scp jar to .be-deploy dir
+scp "${JAR_NAME}" hrvoje@20.82.136.123:~/.be-deploy/new_jar || echo "Failed to scp"
 
-#run remote deployment script
+# Run remote deployment script
+# TODO: nohup java -jar -Dspring.profiles.active=prod backend-0.0.1-SNAPSHOT.jar > be.log 2>&1 &
+ssh hrvoje@20.82.136.123 "/home/hrvoje/be-deploy.sh"
 
 
 # goto root

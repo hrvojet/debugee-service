@@ -1,0 +1,87 @@
+#!/bin/bash
+
+## This script deploys debugee-backend by switching running jar with new one
+#
+# It is used by GitLab CI/CD and it should be located in
+# home directory on a web server of a user running it
+#
+
+# Require option jar-name
+read_params() {
+    for i in "$@"; do
+        case $i in
+        -jn=*|--jar-name=*)
+        NEW_JAR="${i#*=}"
+        shift
+        ;;
+        *)
+        echo "Unknown option $i"
+        exit 1
+        ;;
+        esac
+    done
+
+    # Check if NEW_JAR is empty (parameter not provided)
+      if [ -z "$NEW_JAR" ]; then
+          echo "Error: -jn/--jar-name parameter is mandatory."
+          exit 1
+      fi
+}
+
+deploy_jars() {
+
+# Make backup of current jar
+cp "$CURRENT_JAR" "backup/$CURRENT_JAR-$(date +%FT%R)@time.jar"
+
+# Kill current jar by PID
+CURRENT_RUNNING_PID=$(cat /tmp/DEBUGEE_PID)
+echo "Current DEBUGEE_PID: $CURRENT_RUNNING_PID"
+kill -9 "$CURRENT_RUNNING_PID"
+echo "Waiting for 5 seconds to kill process: $CURRENT_RUNNING_PID"
+sleep 5
+
+# Delete current running jar and update symbolic link to new running jar
+echo "Deleting $CURRENT_JAR"
+rm "$CURRENT_JAR" || echo "Unable to delete file: $CURRENT_JAR"
+mv new_jar/* .
+ln -vfns "$NEW_JAR" backend.jar
+
+# Run jar with pid saved in $ENV
+nohup java -jar -Dspring.profiles.active=prod backend.jar > ../be.log 2>&1 &
+DEBUGEE_PID=$!
+echo $DEBUGEE_PID > /tmp/DEBUGEE_PID
+echo "Updated DEBUGEE_PID: $(cat /tmp/DEBUGEE_PID)"
+
+#Finish
+echo "#### Finish backend deployment ####"
+}
+
+# SCRIPT START
+echo "#### Script start ####"
+read_params "$@"
+
+# Change dir
+echo "Changing work dir to '.be-deploy'"
+cd ".be-deploy" || echo "Failed to cd to '.be-deploy'"
+
+# TODO Validate that there is new jar
+
+CURRENT_JAR=$(readlink -f backend.jar | xargs basename)
+echo "New jar name: $NEW_JAR"
+echo "Current  jar: $CURRENT_JAR"
+
+if [ "$CURRENT_JAR" = "$NEW_JAR" ]
+then
+  if [[ $NEW_JAR == *"SNAPSHOT"* ]]
+  then
+    echo "(Re)Deploying snapshot"
+    # Run replacement even if strings are equal
+    deploy_jars
+  else
+  # Don't allow redeployment of non-snapshot jars
+  echo "Jars are equal! Abort" && exit 1
+  fi
+else
+  deploy_jars
+fi
+
