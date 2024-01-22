@@ -1,0 +1,22 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build-jar:
+  stage: build
+  script:
+    - ./mvnw clean install
+  artifacts:
+    paths:
+      - ./target/*.jar
+
+test-jar:
+  stage: test
+  script:
+    - ./mvnw test
+
+deploy-to-server:
+  stage: deploy
+  script:
+    - ./deploy-jar-to-server.sh
