@@ -53,9 +53,10 @@ public class IssueController {
             @RequestParam(required = false, defaultValue = "ASC") final String sortBy,
             @RequestParam(required = false, defaultValue = "id") final String id,
             @RequestParam(required = false) final Long labelID,
+            @RequestParam(required = false) final Long userId,
             @Valid @RequestBody IssueSearchCommand isc) {
         // TODO merge search and get to one get query with requestParams
-        return issueService.searchIssues(projectId, createPageRequest(page, size, sortBy, id), isc, labelID);
+        return issueService.searchIssues(projectId, createPageRequest(page, size, sortBy, id), isc, labelID, userId);
     }
 
     @PostMapping("/{projectID}")

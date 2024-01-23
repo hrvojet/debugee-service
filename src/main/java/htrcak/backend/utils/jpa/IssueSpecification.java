@@ -27,4 +27,8 @@ public class IssueSpecification {
         });
     }
 
+    public static Specification<Issue> findUser(Long userId) {
+        return userId == null ? null : ((issue, query, cb) -> cb.equal(issue.get("originalPoster").get("id"), userId));
+    }
+
 }

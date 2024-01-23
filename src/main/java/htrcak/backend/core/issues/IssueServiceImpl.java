@@ -21,9 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static htrcak.backend.utils.jpa.IssueSpecification.getById;
-import static htrcak.backend.utils.jpa.IssueSpecification.findComment;
-import static htrcak.backend.utils.jpa.IssueSpecification.findLabel;
+import static htrcak.backend.utils.jpa.IssueSpecification.*;
 import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
@@ -48,8 +46,8 @@ public class IssueServiceImpl implements IssueService {
 
 
     @Override
-    public Page<IssueDTO> searchIssues(Long projectID, Pageable pageable, IssueSearchCommand isc, Long labelID) {
-        return issueRepositoryJPA.findAll(where(getById(projectID).and(findComment(isc)).and(findLabel(labelID))), pageable)
+    public Page<IssueDTO> searchIssues(Long projectID, Pageable pageable, IssueSearchCommand isc, Long labelID, Long userId) {
+        return issueRepositoryJPA.findAll(where(getById(projectID).and(findComment(isc)).and(findLabel(labelID)).and(findUser(userId))), pageable)
                 .map(IssueDTO::new);
     }
 
