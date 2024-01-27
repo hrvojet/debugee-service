@@ -4,6 +4,7 @@ import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ public interface ProjectService {
 
     Page<ProjectDTO> findAll(Pageable pageable);
 
+    Page<ProjectDTO> findAllFavourites(Pageable pageable);
+
     ProjectDTO findById(long id);
 
     ResponseEntity<ProjectDTO> saveNewProject(ProjectPostValidator projectPost);
@@ -22,4 +25,9 @@ public interface ProjectService {
     ResponseEntity<?> deleteById(long id);
 
     ResponseEntity<?> updateById(ProjectPatchValidator projectPost, long id);
+
+    ResponseEntity<?> addProjectToFavourites(Long projectId);
+
+    ResponseEntity<?> removeProjectFromFavourites(Long projectId);
+
 }

@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -50,6 +51,14 @@ public class Project {
     @JoinColumn(name = "owner")
     @NotNull
     private User owner;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "user_favourite_project",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
+    )
+    private Set<User> userFavourite = new HashSet<>();
 
     public Project(String title, String description, int closedIssues, int openedIssues, User owner) {
         this.title = title;
@@ -139,5 +148,23 @@ public class Project {
 
     public void setEdited(LocalDateTime edited) {
         this.edited = edited;
+    }
+
+    public Set<User> getUserFavourite() {
+        return userFavourite;
+    }
+
+    public void addProjectAsFavourite(User user) {
+        userFavourite.add(user);
+        user.getFavouriteProjects().add(this);
+    }
+
+    public void removeProjectAsFavourite(User user) {
+        userFavourite.remove(user);
+        user.getFavouriteProjects().remove(this);
+    }
+
+    public void setUserFavourite(Set<User> userFavourite) {
+        this.userFavourite = userFavourite;
     }
 }

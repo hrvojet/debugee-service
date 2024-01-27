@@ -57,3 +57,8 @@ CREATE TABLE IF NOT EXISTS issue_label (
     label_id INT NOT NULL,
     issue_id INT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS user_favourite_project (
+    user_id INT NOT NULL,
+    project_id INT NOT NULL
+);

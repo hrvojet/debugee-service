@@ -51,6 +51,10 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "originalPoster", fetch = FetchType.LAZY)
     private Set<Issue> issues = new HashSet<>();
 
+
+    @ManyToMany(mappedBy = "userFavourite")
+    private Set<Project> favouriteProjects = new HashSet<>();
+
     public User(String username, String email, long id, boolean isAdmin, String webUrl, String avatarUrl) {
         this.id = id;
         this.username = username;
@@ -134,5 +138,23 @@ public class User implements Serializable {
 
     public void setWebUrl(String webUrl) {
         this.webUrl = webUrl;
+    }
+
+    public Set<Project> getFavouriteProjects() {
+        return favouriteProjects;
+    }
+
+    public void setFavouriteProjects(Set<Project> favouriteProjects) {
+        this.favouriteProjects = favouriteProjects;
+    }
+
+    public void addProjectToFavourites(Project project) {
+        favouriteProjects.add(project);
+        project.getUserFavourite().add(this);
+    }
+
+    public void removeProjectFromFavourites(Project project) {
+        favouriteProjects.remove(project);
+        project.getUserFavourite().remove(this);
     }
 }

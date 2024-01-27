@@ -28,8 +28,19 @@ public class ProjectController {
             @RequestParam(required = false, defaultValue = "0") final int page,
             @RequestParam(required = false, defaultValue = "5") final int size,
             @RequestParam(required = false, defaultValue = "ASC") final String sortBy,
-            @RequestParam(required = false, defaultValue = "id") final String id) {
+            @RequestParam(required = false, defaultValue = "id") final String id
+    ) {
         return projectService.findAll(PageRequest.of(page, size, Sort.by("ASC".equalsIgnoreCase(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC, id)));
+    }
+
+    @GetMapping("favourites")
+    public Page<ProjectDTO> findAllFavouritesProjects(
+            @RequestParam(required = false, defaultValue = "0") final int page,
+            @RequestParam(required = false, defaultValue = "5") final int size,
+            @RequestParam(required = false, defaultValue = "ASC") final String sortBy,
+            @RequestParam(required = false, defaultValue = "id") final String id
+    ) {
+        return projectService.findAllFavourites(PageRequest.of(page, size, Sort.by("ASC".equalsIgnoreCase(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC, id)));
     }
 
     @GetMapping("/{id}")
@@ -51,5 +62,25 @@ public class ProjectController {
     public ResponseEntity<?> updateProject(@Valid @RequestBody final ProjectPatchValidator projectPost, @PathVariable final long id) {
         return projectService.updateById(projectPost, id);
     }
+
+    @PostMapping("/favourite/{id}")
+    public ResponseEntity<?> addProjectToFavourites(@PathVariable final Long id) {
+        return projectService.addProjectToFavourites(id);
+    }
+
+    @DeleteMapping("/favourite/{id}")
+    public ResponseEntity<?> removeProjectToFavourites(@PathVariable final Long id) {
+        return projectService.removeProjectFromFavourites(id);
+    }
+
+
+
+    /*@GetMapping
+    public Page<ProjectDTO> findAllFavouriteProjects(
+            @RequestParam(required = false, defaultValue = "0") final int page,
+            @RequestParam(required = false, defaultValue = "5") final int size,
+            @RequestParam(required = false, defaultValue = "ASC") final String sortBy,
+            @RequestParam(required = false, defaultValue = "id") final String id
+    )*/
 
 }

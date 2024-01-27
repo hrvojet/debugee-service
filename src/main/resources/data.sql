@@ -68,3 +68,8 @@ INSERT INTO label(id, project_id, label_name, description, color_hex) VALUES (5,
 
 INSERT INTO issue_label(label_id, issue_id) VALUES (1,1);
 INSERT INTO issue_label(label_id, issue_id) VALUES (5,6);
+
+INSERT INTO user_favourite_project(user_id, project_id) VALUES (7, 5);
+INSERT INTO user_favourite_project(user_id, project_id) VALUES (7, 1);
+INSERT INTO user_favourite_project(user_id, project_id) VALUES (7, 2);
+INSERT INTO user_favourite_project(user_id, project_id) VALUES (3, 4);

@@ -4,6 +4,7 @@ import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
 import htrcak.backend.core.projects.data.ProjectRepositoryJPA;
+import htrcak.backend.core.user.model.User;
 import htrcak.backend.utils.SecurityContextHolderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.Optional;
+
+import static htrcak.backend.utils.jpa.ProjectSpecification.favouriteByUser;
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class ProjectServiceImpl implements ProjectService{
@@ -36,6 +40,16 @@ public class ProjectServiceImpl implements ProjectService{
     public Page<ProjectDTO> findAll(Pageable pageable) {
         return projectRepositoryJPA.findAll(pageable).map(this::mapProjectToDTO);
     }
+
+    @Override
+    public Page<ProjectDTO> findAllFavourites(Pageable pageable) {
+
+        User user = securityContextHolderUtils.getCurrentUser();
+
+        return projectRepositoryJPA.findAll(where(favouriteByUser(user.getId())), pageable)
+                .map(this::mapProjectToDTO);
+    }
+
 
     @Override
     public ProjectDTO findById(long id) {
@@ -93,6 +107,34 @@ public class ProjectServiceImpl implements ProjectService{
             logger.debug(MessageFormat.format("No change applied to project with {0} ID", id));
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+    }
+
+    @Override
+    public ResponseEntity<?> addProjectToFavourites(Long projectId) {
+        Optional<Project> project = this.projectRepositoryJPA.findById(projectId);
+        if (project.isEmpty()) {
+            logger.warn(MessageFormat.format("There is no project with id [{0}]", projectId));
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        User user = securityContextHolderUtils.getCurrentUser();
+        project.get().addProjectAsFavourite(user);
+
+        return new ResponseEntity<>(mapProjectToDTO(this.projectRepositoryJPA.save(project.get())), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> removeProjectFromFavourites(Long projectId) {
+        Optional<Project> project = this.projectRepositoryJPA.findById(projectId);
+        if (project.isEmpty()) {
+            logger.warn(MessageFormat.format("There is no project with id [{0}]", projectId));
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        User user = securityContextHolderUtils.getCurrentUser();
+        project.get().removeProjectAsFavourite(user);
+
+        return new ResponseEntity<>(mapProjectToDTO(this.projectRepositoryJPA.save(project.get())), HttpStatus.OK);
     }
 
     private ProjectDTO mapProjectToDTO(Project project) {
