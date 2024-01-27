@@ -178,7 +178,7 @@ public class LabelServiceImpl implements LabelService {
         // TODO util class?
         if (t instanceof Issue) {
             if (((Issue) t).getProject().getOwner().getId() != securityContextHolderUtils.getCurrentUser().getId()) {
-                logger.warn(MessageFormat.format("User with id [{0}] not allowed to modify project with id [{1}]", securityContextHolderUtils.getCurrentUser().getId(), ((Issue) t).getProject().getId()));
+                logger.warn(MessageFormat.format("User with id [{0}] not allowed to modify issue with id [{1}]", securityContextHolderUtils.getCurrentUser().getId(), ((Issue) t).getProject().getId()));
                 throw new UserNotAllowedException();
             }
         } else if (t instanceof Project) {
