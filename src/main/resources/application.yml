@@ -83,6 +83,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/debugee_db
     driver-class-name: org.postgresql.Driver
     username: debugee
+    password: test
   jpa:
     hibernate:
       ddl-auto: validate
