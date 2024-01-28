@@ -30,4 +30,5 @@ public interface ProjectService {
 
     ResponseEntity<?> removeProjectFromFavourites(Long projectId);
 
+    ResponseEntity<String> getBadgeForProject(Long projectId);
 }

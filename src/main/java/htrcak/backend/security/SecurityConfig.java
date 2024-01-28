@@ -26,7 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     static final String[] UNAUTHENTICATED_ENDPOINTS = new String[]{
             "/callback/**",
             "/error/**",
-            "/h2-console/**"
+            "/h2-console/**",
+            "/api/projects/badge/**"
     };
 
     private final JWTFilter jwtFilter;
