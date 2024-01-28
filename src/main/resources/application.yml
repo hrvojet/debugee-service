@@ -58,7 +58,38 @@ spring:
 spring:
   config:
     activate:
+      on-profile: localpg
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/debugee_db
+    driver-class-name: org.postgresql.Driver
+    username: debugee
+    password: debugee
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+
+---
+spring:
+  config:
+    activate:
       on-profile: prod
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/debugee_db
+    driver-class-name: org.postgresql.Driver
+    username: debugee
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
 
 cors:
   allowed-origins: http://20.82.136.123,https://debugee.live

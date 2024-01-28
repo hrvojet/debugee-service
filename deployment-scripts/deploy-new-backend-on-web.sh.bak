@@ -47,7 +47,8 @@ mv new_jar/* .
 ln -vfns "$NEW_JAR" backend.jar
 
 # Run jar with pid saved in $ENV
-nohup java -jar -Dspring.profiles.active=prod backend.jar > ../be.log 2>&1 &
+DEBUGEE_DB_PW=$(cat /tmp/DEBUGEE_DB_PW)
+nohup java -jar -Dspring.datasource.password=$"DEBUGEE_DB_PW" -Dspring.profiles.active=prod backend.jar > ../be.log 2>&1 &
 DEBUGEE_PID=$!
 echo $DEBUGEE_PID > /tmp/DEBUGEE_PID
 echo "Updated DEBUGEE_PID: $(cat /tmp/DEBUGEE_PID)"
