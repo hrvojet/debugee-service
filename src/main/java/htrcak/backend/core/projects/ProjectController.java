@@ -75,7 +75,7 @@ public class ProjectController {
         return projectService.removeProjectFromFavourites(id);
     }
 
-    @GetMapping("/badge/{projectId}")
+    @GetMapping("/badge/{projectId}.svg")
     public ResponseEntity<String> getProjectBadgeLink(@PathVariable final Long projectId) {
         return projectService.getBadgeForProject(projectId);
     }
