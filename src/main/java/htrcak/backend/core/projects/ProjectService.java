@@ -14,9 +14,9 @@ import java.util.Optional;
 
 public interface ProjectService {
 
-    Page<ProjectDTO> findAll(Pageable pageable);
+    Page<ProjectDTO> findAll(Pageable pageable, String searchProjectByTitle);
 
-    Page<ProjectDTO> findAllFavourites(Pageable pageable);
+    Page<ProjectDTO> findAllFavourites(Pageable pageable, String searchProjectByTitle);
 
     ProjectDTO findById(long id);
 

@@ -1,5 +1,6 @@
 package htrcak.backend.core.projects;
 
+import com.nimbusds.oauth2.sdk.util.StringUtils;
 import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/projects")
@@ -28,9 +28,10 @@ public class ProjectController {
             @RequestParam(required = false, defaultValue = "0") final int page,
             @RequestParam(required = false, defaultValue = "5") final int size,
             @RequestParam(required = false, defaultValue = "ASC") final String sortBy,
-            @RequestParam(required = false, defaultValue = "id") final String id
-    ) {
-        return projectService.findAll(PageRequest.of(page, size, Sort.by("ASC".equalsIgnoreCase(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC, id)));
+            @RequestParam(required = false, defaultValue = "id") final String id,
+            @RequestParam(required = false) final String projectTitle
+            ) {
+        return projectService.findAll(PageRequest.of(page, size, Sort.by("ASC".equalsIgnoreCase(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC, id)), projectTitle);
     }
 
     @GetMapping("favourites")
@@ -38,9 +39,10 @@ public class ProjectController {
             @RequestParam(required = false, defaultValue = "0") final int page,
             @RequestParam(required = false, defaultValue = "5") final int size,
             @RequestParam(required = false, defaultValue = "ASC") final String sortBy,
-            @RequestParam(required = false, defaultValue = "id") final String id
+            @RequestParam(required = false, defaultValue = "id") final String id,
+            @RequestParam(required = false) final String projectTitle
     ) {
-        return projectService.findAllFavourites(PageRequest.of(page, size, Sort.by("ASC".equalsIgnoreCase(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC, id)));
+        return projectService.findAllFavourites(PageRequest.of(page, size, Sort.by("ASC".equalsIgnoreCase(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC, id)), projectTitle);
     }
 
     @GetMapping("/{id}")

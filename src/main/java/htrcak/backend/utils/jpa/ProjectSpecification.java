@@ -28,4 +28,8 @@ public class ProjectSpecification {
             return cb.exists(userSubquery);
         };
     }
+
+    public static Specification<Project> findProject(String projectSearchString) {
+        return projectSearchString == null ? null : (((root, query, cb) -> cb.like(cb.lower(root.get("title")), "%" + projectSearchString.toLowerCase().trim() + "%")));
+    }
 }

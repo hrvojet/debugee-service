@@ -1,5 +1,6 @@
 package htrcak.backend.core.projects;
 
+import com.nimbusds.oauth2.sdk.util.StringUtils;
 import htrcak.backend.core.projects.data.ProjectDTO;
 import htrcak.backend.core.projects.data.ProjectPatchValidator;
 import htrcak.backend.core.projects.data.ProjectPostValidator;
@@ -9,9 +10,7 @@ import htrcak.backend.utils.SecurityContextHolderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,7 @@ import java.text.MessageFormat;
 import java.util.Optional;
 
 import static htrcak.backend.utils.jpa.ProjectSpecification.favouriteByUser;
+import static htrcak.backend.utils.jpa.ProjectSpecification.findProject;
 import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
@@ -37,16 +37,16 @@ public class ProjectServiceImpl implements ProjectService{
 
 
     @Override
-    public Page<ProjectDTO> findAll(Pageable pageable) {
-        return projectRepositoryJPA.findAll(pageable).map(this::mapProjectToDTO);
+    public Page<ProjectDTO> findAll(Pageable pageable, String spbt) {
+        return projectRepositoryJPA.findAll(where(findProject(StringUtils.isNotBlank(spbt) ? spbt : null)), pageable).map(this::mapProjectToDTO);
     }
 
     @Override
-    public Page<ProjectDTO> findAllFavourites(Pageable pageable) {
+    public Page<ProjectDTO> findAllFavourites(Pageable pageable, String spbt) {
 
         User user = securityContextHolderUtils.getCurrentUser();
 
-        return projectRepositoryJPA.findAll(where(favouriteByUser(user.getId())), pageable)
+        return projectRepositoryJPA.findAll(where(favouriteByUser(user.getId()).and(findProject(StringUtils.isNotBlank(spbt) ? spbt : null))), pageable)
                 .map(this::mapProjectToDTO);
     }
 
