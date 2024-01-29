@@ -93,7 +93,7 @@ spring:
     generate-ddl: true
 
 cors:
-  allowed-origins: http://20.82.136.123,https://debugee.live
+  allowed-origins: http://20.82.136.123,http://www.debugee.live
 
 gitlab:
   uri: http://164.90.165.32
