@@ -85,9 +85,11 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public ResponseEntity<?> deleteById(long issueId) {
 
-        long issueForDeletionID = this.issueRepositoryJPA.getById(issueId).getOriginalPoster().getId();
+        Issue issueForDeletion = this.issueRepositoryJPA.getById(issueId);
+        long issueForDeletionID = issueForDeletion.getOriginalPoster().getId();
         if (issueForDeletionID == securityContextHolderUtils.getCurrentUser().getId() || securityContextHolderUtils.getCurrentUser().isAdmin()) {
             this.issueRepositoryJPA.deleteById(issueId);
+            propagateEditToProject(issueForDeletion);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
@@ -143,7 +145,8 @@ public class IssueServiceImpl implements IssueService {
 
     private void propagateEditToProject(Issue issue) {
         Project project = projectRepositoryJPA.getById(issue.getProject().getId());
-        project.setEdited(issue.getEdited());
-        projectRepositoryJPA.save(project);
+            project.setEdited(issue.getEdited());
+            project.setOpenedIssues(issueRepositoryJPA.openedIssuesForProject(issue.getProject().getId()));
+            projectRepositoryJPA.save(project);
     }
 }
