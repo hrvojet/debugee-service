@@ -98,5 +98,5 @@ cors:
 gitlab:
   uri: http://164.90.165.32
   client-id: 4aaa243bf068dd1c42616d15d555e394d9a76cc51ca9d2fac4af89ce5e035a10
-  callback-url: http://20.82.136.123/callback/gitlab
-  web-url: http://20.82.136.123
+  callback-url: https://www.debugee.live/callback/gitlab
+  web-url: https://www.debugee.live
